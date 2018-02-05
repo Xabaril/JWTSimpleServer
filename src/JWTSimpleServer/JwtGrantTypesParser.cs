@@ -2,13 +2,13 @@
 using JWTSimpleServer.GrantTypes;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
-
+using System.Linq;
 namespace JWTSimpleServer
 {
     public class JwtGrantTypesParser
     {
+        private const string GrandTypeParameter = "grand_type";
+
         public static IGrantType Parse(HttpContext context)
         {
             return ParseRequest(context.Request);
@@ -17,18 +17,25 @@ namespace JWTSimpleServer
         {
             var requestForm = request.Form;
 
-            if (!requestForm.ContainsKey(GrantType.Password))
+            if (requestForm.ContainsKey(GrandTypeParameter))
             {
-                return new PasswordGrantType()
+                var grandTypeValue = requestForm[GrandTypeParameter].FirstOrDefault();
+                switch (grandTypeValue)
                 {
-                    UserName = requestForm["username"],
-                    Password = requestForm["password"]
-                };
-            }
-            else if (!requestForm.ContainsKey(GrantType.RefreshToken))
-            {
-                throw new NotImplementedException();
-            }
+                    case GrantType.Password:
+                        return new PasswordGrantType()
+                        {
+                            UserName = requestForm["username"].FirstOrDefault(),
+                            Password = requestForm["password"].FirstOrDefault()
+                        };
+
+                    case GrantType.RefreshToken:
+                        throw new NotImplementedException();
+                    default:
+                        return new InvalidGrantType();
+
+                }                
+            }            
             else
             {
                 return new InvalidGrantType();

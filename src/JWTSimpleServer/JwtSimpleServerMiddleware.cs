@@ -7,24 +7,22 @@ using System.Threading.Tasks;
 
 namespace JWTSimpleServer
 {
-    public class JwtSimpleServerMiddleware : IMiddleware
+    public class JwtSimpleServerMiddleware 
     {
         private readonly JwtSimpleServerOptions _serverOptions;
         private readonly IAuthenticationProvider _authenticationProvider;
-        public JwtSimpleServerMiddleware(IAuthenticationProvider authenticationProvider)
-        {
-            _authenticationProvider = authenticationProvider ??
-                                     throw new Exception("No IAuthenticationProvider service was registered. Please register an IAuthentication Provider implementation");
-        }
+        private readonly RequestDelegate _next;
 
-        public JwtSimpleServerMiddleware(JwtSimpleServerOptions serverOptions)
+        public JwtSimpleServerMiddleware(RequestDelegate next, 
+            IAuthenticationProvider authenticationProvider, JwtSimpleServerOptions serverOptions)
         {
+            _next = next;
+            _authenticationProvider = authenticationProvider ?? throw new Exception(ServerMessages.AuthenticationProviderNotRegistered);
             _serverOptions = serverOptions;
-        }
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        }      
+        public async Task InvokeAsync(HttpContext context)
         {
             await ProcessGrantType(JwtGrantTypesParser.Parse(context), context);
-
         }
 
         private async Task PasswordJwtEncode(PasswordGrantType passwordGrandType, HttpContext context)
@@ -53,7 +51,7 @@ namespace JWTSimpleServer
                     return Task.CompletedTask;
 
                 default:
-                    return WriteResponseError(context, "Invalid grant_type");
+                    return WriteResponseError(context, ServerMessages.InvalidGrantType);
             }
         }
 

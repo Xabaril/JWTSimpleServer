@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
+    <NetCoreTargetVersion>netcoreapp2.0</NetCoreTargetVersion>
     <MicrosoftNETTestSdkPackageVersion>15.5.0</MicrosoftNETTestSdkPackageVersion>
   </PropertyGroup>
   
@@ -10,7 +11,8 @@
     <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.0.1</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
     <FluentAssertionsPackageVersion>5.0.0</FluentAssertionsPackageVersion>
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
-    <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>    
+    <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
+    <MicrosoftAspNetCoreTestHostPackageVersion>2.0.1</MicrosoftAspNetCoreTestHostPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

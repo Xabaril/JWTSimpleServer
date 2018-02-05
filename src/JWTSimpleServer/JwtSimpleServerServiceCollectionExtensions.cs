@@ -35,7 +35,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             ClockSkew = TimeSpan.Zero
                         };
                     });
-
+            
             return services;
         }
     }

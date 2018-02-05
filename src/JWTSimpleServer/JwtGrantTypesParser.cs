@@ -7,7 +7,7 @@ namespace JWTSimpleServer
 {
     public class JwtGrantTypesParser
     {
-        private const string GrandTypeParameter = "grand_type";
+        private const string GrandTypeParameter = "grant_type";
 
         public static IGrantType Parse(HttpContext context)
         {

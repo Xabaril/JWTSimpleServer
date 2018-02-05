@@ -20,17 +20,14 @@ namespace FunctionalTests
             authProvider = new FakeSuccessAuthenticationProvider();
             return this;
         }
-
+        
         public TestServer Build()
         {
             var webhostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddJwtSimpleServer(options =>
-                    {
-                        options.IssuerSigningKey = "test";
-                        options.ValidIssuer = "test";
-                    })
+                    services.AddJwtSimpleServer(options => { })                       
+                    
                     .AddTransient(ctx =>
                     {
                         return authProvider;
@@ -38,7 +35,9 @@ namespace FunctionalTests
 
                 }).Configure(app =>
                {
-                   app.UseJwtSimpleServer(setup => { });
+                   app.UseJwtSimpleServer(setup => {
+                       
+                   });
                });
 
             return new TestServer(webhostBuilder);

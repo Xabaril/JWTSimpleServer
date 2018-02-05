@@ -1,7 +1,9 @@
 ﻿using JWTSimpleServer.GrantTypes;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +34,8 @@ namespace JWTSimpleServer
 
             if (simpleServerContext.IsValid())
             {
-                
+                var jwtToken = new JwtTokenEncoder(_serverOptions).WriteToken(simpleServerContext);
+                await WriteResponseAsync(context, JsonConvert.SerializeObject(jwtToken));
             }
             else
             {
@@ -53,6 +56,16 @@ namespace JWTSimpleServer
                 default:
                     return WriteResponseError(context, ServerMessages.InvalidGrantType);
             }
+        }
+
+        
+        private Task WriteResponseAsync(
+         HttpContext context,
+         string content)
+        {
+            context.Response.Headers["Content-Type"] = "application/json";         
+            context.Response.StatusCode = StatusCodes.Status200OK;
+            return context.Response.WriteAsync(content);
         }
 
         private Task WriteAuthenticationError(HttpContext context, JwtSimpleServerContext jwtSimpleServerContext)

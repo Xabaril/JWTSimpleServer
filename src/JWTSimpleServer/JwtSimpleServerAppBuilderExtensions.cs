@@ -13,8 +13,9 @@ namespace Microsoft.AspNetCore.Builder
             serverSetup(simpleServerOptions);
 
             app.MapWhen( context => IsValidJwtMiddlewareRequest(context, simpleServerOptions),                
-                      appBuilder => appBuilder.UseMiddleware<JwtSimpleServerMiddleware>(simpleServerOptions));            
+                      appBuilder => appBuilder.UseMiddleware<JwtSimpleServerMiddleware>(simpleServerOptions));
 
+            app.UseAuthentication();
             return app;
         }
         private static bool IsValidJwtMiddlewareRequest(HttpContext context, JwtSimpleServerOptions options)

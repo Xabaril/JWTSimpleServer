@@ -1,11 +1,8 @@
 using FluentAssertions;
 using JWTSimpleServer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -44,6 +41,26 @@ namespace FunctionalTests.JwtSimpleServer
             jwtTokenResponse.AccessToken.Should().NotBeNull();
             jwtTokenResponse.ExpiresIn.Should().BeGreaterThan(0);
            
+        }
+
+        [Fact]
+        public async Task allow_invoking_authorized_controller_with_a_token()
+        {
+            var server = new TestServerBuilder()
+                   .WithSuccessAuthentication()
+                   .Build();
+
+            var client = server.CreateClient();
+
+            var response = await client.PostAsync("/token", GrantTypes.APasswordGrantType());
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            var jwtTokenResponse = JsonConvert.DeserializeObject<JwtTokenResponse>(content);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtTokenResponse.AccessToken);
+            response = await client.GetAsync("/api/test");
+
+            response.EnsureSuccessStatusCode();
         }
         
     }

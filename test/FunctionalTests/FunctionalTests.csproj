@@ -8,7 +8,9 @@
   
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsPackageVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="$(MicrosoftAspNetCoreAuthorizationPackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="$(MicrosoftAspNetCoreMvcCorePackageVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHostPackageVersion)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Include="xunit" Version="$(XUnitPackageVersion)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualstudio)" />

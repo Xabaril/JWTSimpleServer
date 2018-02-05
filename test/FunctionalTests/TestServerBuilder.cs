@@ -26,18 +26,20 @@ namespace FunctionalTests
             var webhostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddJwtSimpleServer(options => { })                       
-                    
+                    services.AddJwtSimpleServer(options => { })                                           
                     .AddTransient(ctx =>
                     {
                         return authProvider;
-                    });
+                    })
+                    .AddMvcCore()
+                    .AddAuthorization();
 
                 }).Configure(app =>
                {
                    app.UseJwtSimpleServer(setup => {
                        
-                   });
+                   })
+                   .UseMvc();
                });
 
             return new TestServer(webhostBuilder);

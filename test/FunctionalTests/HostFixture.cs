@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,14 +28,5 @@ namespace FunctionalTests
 
             Server = new TestServer(builder);
         }
-    }
-
-    public class FakeAuthenticationProvider : IAuthenticationProvider
-    {
-        public Task ValidateClientAuthentication(JwtSimpleServerContext context)
-        {
-            context.Success(new ClaimsIdentity());
-            return Task.CompletedTask;
-        }
-    }
+    }   
 }

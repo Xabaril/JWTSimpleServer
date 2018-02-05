@@ -21,21 +21,21 @@ namespace JWTSimpleServer
         public string UserName { get; }
         public string Password { get; }
         private bool _contextValidated = false;
-        private string _errorMessage = "Invalid authentication";
-        public ClaimsIdentity claimsIdentity = null;
-        public bool IsValid() => _contextValidated;
+        private string _errorMessage = ServerMessages.InvalidAuthentication;
+        internal IEnumerable<Claim> Claims { get; private set;  } = null;
+        internal bool IsValid() => _contextValidated;
 
-        public string GetError() => _errorMessage;
+        internal string GetError() => _errorMessage;
 
         public void Reject(string errorMessage)
         {
             _contextValidated = false;
             _errorMessage = errorMessage;
         }
-        public void Success(ClaimsIdentity identity)
+        public void Success(IEnumerable<Claim> claims)
         {
             _contextValidated = true;
-            claimsIdentity = identity;
+            Claims = claims;
         }
 
     }

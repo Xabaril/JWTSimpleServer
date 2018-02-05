@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using System.Linq;
 
 namespace FunctionalTests
 {
@@ -16,7 +17,7 @@ namespace FunctionalTests
         private IAuthenticationProvider authProvider;
         public TestServerBuilder WithSuccessAuthentication()
         {
-            authProvider = new FakeAuthenticationProvider();
+            authProvider = new FakeSuccessAuthenticationProvider();
             return this;
         }
 
@@ -47,7 +48,7 @@ namespace FunctionalTests
         {
             public Task ValidateClientAuthentication(JwtSimpleServerContext context)
             {
-                context.Success(new ClaimsIdentity());
+                context.Success(Enumerable.Empty<Claim>());
                 return Task.CompletedTask;
             }
         }

@@ -32,7 +32,7 @@ namespace JWTSimpleServer
 
             if (simpleServerContext.IsValid())
             {
-
+                
             }
             else
             {

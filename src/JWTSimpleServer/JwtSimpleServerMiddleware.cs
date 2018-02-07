@@ -40,7 +40,10 @@ namespace JWTSimpleServer
 
             if (simpleServerContext.IsValid())
             {
-                var jwtToken = new JwtTokenEncoder(_serverOptions).WriteToken(simpleServerContext);
+                var jwtToken = await (
+                         new JwtTokenEncoder(_serverOptions, _refreshTokenStore))
+                        .WriteToken(simpleServerContext);
+
                 await WriteResponseAsync(StatusCodes.Status200OK, context, JsonConvert.SerializeObject(jwtToken));
             }
             else

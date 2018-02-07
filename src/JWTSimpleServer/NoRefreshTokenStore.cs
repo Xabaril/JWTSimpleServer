@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JWTSimpleServer
 {
     public class NoRefreshTokenStore : IRefreshTokenStore
-    {
+    { 
         public Task<string> GetRefreshTokenAsync(string refreshToken)
         {
             return Task.FromResult(string.Empty);
@@ -18,9 +18,13 @@ namespace JWTSimpleServer
             return Task.CompletedTask;
         }
 
-        public Task StoreTokenAsync(string accessToken, string refreshToken)
+        public Task StoreTokenAsync(Token token)
         {
             return Task.CompletedTask;
+        }
+        public string GenerateRefreshToken()
+        {
+            return string.Empty;
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace JWTSimpleServer
 {
@@ -19,7 +20,7 @@ namespace JWTSimpleServer
             _options = options;
             _refreshTokenStore = refreshTokenStore;
         }
-        public JwtTokenResponse WriteToken(JwtSimpleServerContext context)
+        public async Task<JwtTokenResponse> WriteToken(JwtSimpleServerContext context)
         {
             var expiresDate = _options.Expires();
             var startingDate = _options.NotBefore();
@@ -36,12 +37,18 @@ namespace JWTSimpleServer
                     )
                 );
 
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);            
+            var encodedAccessToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var refreshToken = _refreshTokenStore.GenerateRefreshToken();
+
+            await _refreshTokenStore.StoreTokenAsync(
+                Token.Create(encodedAccessToken, refreshToken, DateTime.UtcNow)
+            );
 
             return new JwtTokenResponse()
             {
-                AccessToken = encodedJwt,
-                ExpiresIn = GetTokenExpiral(startingDate, expiresDate)
+                AccessToken = encodedAccessToken,
+                ExpiresIn = GetTokenExpiral(startingDate, expiresDate),
+                RefreshToken = refreshToken
             };
         }
         private int GetTokenExpiral(DateTime startingDate, DateTime expiryDate) =>

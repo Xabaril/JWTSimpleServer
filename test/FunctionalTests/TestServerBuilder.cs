@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using System.Linq;
+using JWTSimpleServer.Abstractions;
 
 namespace FunctionalTests
 {

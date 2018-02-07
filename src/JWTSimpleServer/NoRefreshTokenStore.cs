@@ -8,12 +8,12 @@ namespace JWTSimpleServer
 {
     public class NoRefreshTokenStore : IRefreshTokenStore
     { 
-        public Task<string> GetRefreshTokenAsync(string refreshToken)
+        public Task<Token> GetTokenAsync(string refreshToken)
         {
-            return Task.FromResult(string.Empty);
+            return null;
         }
 
-        public Task InvalidateRefreshToken(string refreshToken)
+        public Task InvalidateRefreshTokenAsync(string refreshToken)
         {
             return Task.CompletedTask;
         }

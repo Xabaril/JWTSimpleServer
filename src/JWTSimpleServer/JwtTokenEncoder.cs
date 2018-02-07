@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,14 +21,14 @@ namespace JWTSimpleServer
             _options = options;
             _refreshTokenStore = refreshTokenStore;
         }
-        public async Task<JwtTokenResponse> WriteToken(JwtSimpleServerContext context)
+        public async Task<JwtTokenResponse> WriteToken(IEnumerable<Claim> claims)
         {
             var expiresDate = _options.Expires();
             var startingDate = _options.NotBefore();
 
             var jwt = new JwtSecurityToken(
                 issuer: _options.Issuer,
-                claims: context.Claims,
+                claims: claims,
                 notBefore: startingDate,
                 expires: expiresDate,
                 signingCredentials: new SigningCredentials(

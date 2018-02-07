@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
@@ -11,14 +12,15 @@ using System.Threading.Tasks;
 
 namespace JWTSimpleServer
 {
-    public class JwtSimpleServerMiddleware 
+    public class JwtSimpleServerMiddleware
     {
         private readonly JwtSimpleServerOptions _serverOptions;
         private readonly IAuthenticationProvider _authenticationProvider;
         private readonly IRefreshTokenStore _refreshTokenStore;
         private readonly RequestDelegate _next;
+        private readonly JwtTokenEncoder _jwtTokenEncoder;
 
-        public JwtSimpleServerMiddleware(RequestDelegate next, 
+        public JwtSimpleServerMiddleware(RequestDelegate next,
             IAuthenticationProvider authenticationProvider,
             IRefreshTokenStore refreshTokenStore,
             JwtSimpleServerOptions serverOptions)
@@ -27,7 +29,8 @@ namespace JWTSimpleServer
             _authenticationProvider = authenticationProvider ?? throw new Exception(ServerMessages.AuthenticationProviderNotRegistered);
             _refreshTokenStore = refreshTokenStore;
             _serverOptions = serverOptions;
-        }      
+            _jwtTokenEncoder = new JwtTokenEncoder(_serverOptions, _refreshTokenStore);
+        }
         public async Task InvokeAsync(HttpContext context)
         {
             await ProcessGrantType(JwtGrantTypesParser.Parse(context), context);
@@ -40,9 +43,7 @@ namespace JWTSimpleServer
 
             if (simpleServerContext.IsValid())
             {
-                var jwtToken = await (
-                         new JwtTokenEncoder(_serverOptions, _refreshTokenStore))
-                        .WriteToken(simpleServerContext);
+                var jwtToken = await _jwtTokenEncoder.WriteToken(simpleServerContext.Claims);
 
                 await WriteResponseAsync(StatusCodes.Status200OK, context, JsonConvert.SerializeObject(jwtToken));
             }
@@ -52,14 +53,27 @@ namespace JWTSimpleServer
             }
         }
 
-        public Task RefreshToken(RefreshTokenGrantType refreshTokenGrant, HttpContext context)
+        public async Task RefreshToken(RefreshTokenGrantType refreshTokenGrant, HttpContext context)
         {
             if (IsRefreshTokenStoreRegistered())
             {
-               
+                var token = await _refreshTokenStore.GetTokenAsync(refreshTokenGrant.RefreshToken);
+                if (token == null)
+                {
+                    await WriteResponseAsync(StatusCodes.Status404NotFound, context);
+                }
+                else
+                {
+                    var jwtSecurityToken = new JwtSecurityTokenHandler().ReadJwtToken(token.AccessToken);
+                    var jwtToken = _jwtTokenEncoder.WriteToken(jwtSecurityToken.Claims);
+                    await _refreshTokenStore.InvalidateRefreshTokenAsync(token.RefreshToken);
+                    await WriteResponseAsync(StatusCodes.Status200OK, context, JsonConvert.SerializeObject(jwtToken));
+                }
             }
-
-            return WriteNoContentResponse(context, ServerMessages.NoRefreshTokenStoreRegistered);
+            else
+            {
+                await WriteNoContentResponse(context, ServerMessages.NoRefreshTokenStoreRegistered);
+            }            
         }
 
         private Task ProcessGrantType(IGrantType grantType, HttpContext context)
@@ -75,14 +89,14 @@ namespace JWTSimpleServer
                 default:
                     return WriteResponseError(context, ServerMessages.InvalidGrantType);
             }
-        }        
+        }
         private Task WriteResponseAsync(
          int statusCode,
          HttpContext context,
-         string content,
+         string content = "",
          string contentType = "application/json")
         {
-            context.Response.Headers["Content-Type"] = contentType;         
+            context.Response.Headers["Content-Type"] = contentType;
             context.Response.StatusCode = statusCode;
             return context.Response.WriteAsync(content);
         }

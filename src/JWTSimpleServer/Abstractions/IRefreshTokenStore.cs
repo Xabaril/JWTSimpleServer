@@ -7,9 +7,9 @@ namespace JWTSimpleServer.Abstractions
 {
     public interface IRefreshTokenStore
     {
-       Task<string> GetRefreshTokenAsync(string refreshToken);
+       Task<Token> GetTokenAsync(string refreshToken);
        Task StoreTokenAsync(Token token);
-       Task InvalidateRefreshToken(string refreshToken);
+       Task InvalidateRefreshTokenAsync(string refreshToken);
        string GenerateRefreshToken();
     }
 }

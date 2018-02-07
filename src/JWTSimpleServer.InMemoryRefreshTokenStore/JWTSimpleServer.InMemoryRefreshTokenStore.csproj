@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JWTSimpleServer\JWTSimpleServer.csproj" />
+  </ItemGroup>
+
+</Project>

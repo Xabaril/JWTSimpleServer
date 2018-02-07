@@ -1,9 +1,11 @@
-﻿using JWTSimpleServer.GrantTypes;
+﻿using JWTSimpleServer.Abstractions;
+using JWTSimpleServer.GrantTypes;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,13 +15,17 @@ namespace JWTSimpleServer
     {
         private readonly JwtSimpleServerOptions _serverOptions;
         private readonly IAuthenticationProvider _authenticationProvider;
+        private readonly IRefreshTokenStore _refreshTokenStore;
         private readonly RequestDelegate _next;
 
         public JwtSimpleServerMiddleware(RequestDelegate next, 
-            IAuthenticationProvider authenticationProvider, JwtSimpleServerOptions serverOptions)
+            IAuthenticationProvider authenticationProvider,
+            IRefreshTokenStore refreshTokenStore,
+            JwtSimpleServerOptions serverOptions)
         {
             _next = next;
             _authenticationProvider = authenticationProvider ?? throw new Exception(ServerMessages.AuthenticationProviderNotRegistered);
+            _refreshTokenStore = refreshTokenStore;
             _serverOptions = serverOptions;
         }      
         public async Task InvokeAsync(HttpContext context)
@@ -27,7 +33,7 @@ namespace JWTSimpleServer
             await ProcessGrantType(JwtGrantTypesParser.Parse(context), context);
         }
 
-        private async Task PasswordJwtEncode(PasswordGrantType passwordGrandType, HttpContext context)
+        private async Task GenerateJwtToken(PasswordGrantType passwordGrandType, HttpContext context)
         {
             var simpleServerContext = JwtSimpleServerContext.Create(passwordGrandType.UserName, passwordGrandType.Password);
             await _authenticationProvider.ValidateClientAuthentication(simpleServerContext);
@@ -35,7 +41,7 @@ namespace JWTSimpleServer
             if (simpleServerContext.IsValid())
             {
                 var jwtToken = new JwtTokenEncoder(_serverOptions).WriteToken(simpleServerContext);
-                await WriteResponseAsync(context, JsonConvert.SerializeObject(jwtToken));
+                await WriteResponseAsync(StatusCodes.Status200OK, context, JsonConvert.SerializeObject(jwtToken));
             }
             else
             {
@@ -43,29 +49,55 @@ namespace JWTSimpleServer
             }
         }
 
+        public Task RefreshToken(RefreshTokenGrantType refreshTokenGrant, HttpContext context)
+        {
+            if (IsRefreshTokenStoreRegistered())
+            {
+               
+            }
+
+            return WriteNoContentResponse(context, ServerMessages.NoRefreshTokenStoreRegistered);
+        }
+
         private Task ProcessGrantType(IGrantType grantType, HttpContext context)
         {
             switch (grantType)
             {
                 case PasswordGrantType password:
-                    return PasswordJwtEncode(password, context);
+                    return GenerateJwtToken(password, context);
 
                 case RefreshTokenGrantType refresh:
-                    return Task.CompletedTask;
+                    return RefreshToken(refresh, context);
 
                 default:
                     return WriteResponseError(context, ServerMessages.InvalidGrantType);
             }
+        }        
+        private Task WriteResponseAsync(
+         int statusCode,
+         HttpContext context,
+         string content,
+         string contentType = "application/json")
+        {
+            context.Response.Headers["Content-Type"] = contentType;         
+            context.Response.StatusCode = statusCode;
+            return context.Response.WriteAsync(content);
         }
 
-        
-        private Task WriteResponseAsync(
-         HttpContext context,
-         string content)
+        private Task WriteNoContentResponse(
+            HttpContext context,
+            string content)
         {
-            context.Response.Headers["Content-Type"] = "application/json";         
-            context.Response.StatusCode = StatusCodes.Status200OK;
-            return context.Response.WriteAsync(content);
+            return WriteResponseAsync(
+                StatusCodes.Status204NoContent,
+                context,
+                content,
+                MediaTypeNames.Text.Plain);
+
+        }
+        private bool IsRefreshTokenStoreRegistered()
+        {
+            return !(_refreshTokenStore is NoRefreshTokenStore);
         }
 
         private Task WriteAuthenticationError(HttpContext context, JwtSimpleServerContext jwtSimpleServerContext)

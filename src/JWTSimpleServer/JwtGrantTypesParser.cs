@@ -10,7 +10,7 @@ namespace JWTSimpleServer
         private const string GrandTypeParameter = "grant_type";
 
         public static IGrantType Parse(HttpContext context)
-        {
+        {            
             return ParseRequest(context.Request);
         }
         private static IGrantType ParseRequest(HttpRequest request)
@@ -30,7 +30,10 @@ namespace JWTSimpleServer
                         };
 
                     case GrantType.RefreshToken:
-                        throw new NotImplementedException();
+                        return new RefreshTokenGrantType()
+                        {
+                            RefreshToken = requestForm["refresh_token"].FirstOrDefault()
+                        };
                     default:
                         return new InvalidGrantType();
 

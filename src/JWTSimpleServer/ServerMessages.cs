@@ -8,6 +8,7 @@ namespace JWTSimpleServer
     {
         public const string InvalidGrantType = "Invalid grant_type";
         public const string InvalidAuthentication = "Invalid Authentication";
-        public const string AuthenticationProviderNotRegistered = "No IAuthenticationProvider service was registered.Please register an IAuthentication Provider implementation";
+        public const string AuthenticationProviderNotRegistered = "No IAuthenticationProvider service was registered.Please register an IAuthenticationProvider implementation";
+        public const string NoRefreshTokenStoreRegistered = "No IRefreshTokenStore service was registered. Please register an IRefreshTokenStore implementation";
     }
 }

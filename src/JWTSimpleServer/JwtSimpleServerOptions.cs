@@ -11,8 +11,7 @@ namespace JWTSimpleServer
         public string Issuer { get; set; } = Constants.DefaultIssuer;
         public string IssuerSigningKey { get; set; } = Constants.DefaultSigningKey;
         public Func<DateTime> NotBefore = () => DateTime.UtcNow;
-        public Func<DateTime> Expires = () => DateTime.UtcNow.AddMinutes(15);
-
+        public Func<DateTime> Expires = () => DateTime.UtcNow.AddMinutes(15);        
         public void UseRefreshToken() => _UseRefreshToken = true;        
 
         private bool _UseRefreshToken = false;

@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JWTSimpleServer
+namespace JWTSimpleServer.Abstractions
 {
     public interface IAuthenticationProvider
     {

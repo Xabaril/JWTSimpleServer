@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using JWTSimpleServer.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,10 +10,14 @@ namespace JWTSimpleServer
     public class JwtTokenEncoder
     {
         private readonly JwtSimpleServerOptions _options;
+        private readonly IRefreshTokenStore _refreshTokenStore;
 
-        public JwtTokenEncoder(JwtSimpleServerOptions options)
+        public JwtTokenEncoder(
+            JwtSimpleServerOptions options,
+            IRefreshTokenStore refreshTokenStore)
         {
             _options = options;
+            _refreshTokenStore = refreshTokenStore;
         }
         public JwtTokenResponse WriteToken(JwtSimpleServerContext context)
         {
@@ -31,7 +36,8 @@ namespace JWTSimpleServer
                     )
                 );
 
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);            
+
             return new JwtTokenResponse()
             {
                 AccessToken = encodedJwt,

@@ -3,15 +3,15 @@ import { Token } from "./JwtSimpleServerClient";
 import { Observer } from './observable';
 
 export class RefreshTokenServiceOptions {
-    intervalSeconds: number | undefined = undefined;
-    refreshToken: string;
-    onRefreshTokenSuccessCallback: (eventData: Token) => void;
+    intervalSeconds: number | null = null;
+    refreshToken: string = "";
+    onRefreshTokenSuccessCallback?: (eventData: Token) => void;
 }
 
 export class JwtRefreshTokenService {
-    private _intervalSubscription: number;
+    private _intervalSubscription: number = 0;
     private _aborted: boolean = false;
-    private _refreshSubscription: Observer<Token>;
+    private _refreshSubscription?: Observer<Token>;
 
     constructor(private client: JwtSimpleServerClient) { }
 
@@ -21,10 +21,12 @@ export class JwtRefreshTokenService {
         this._ensureOptions(refreshTokenOptions);
 
         this._refreshSubscription = this.client.onRequestAccessTokenSuccess.subscribe(token => {
-            refreshTokenOptions.onRefreshTokenSuccessCallback(token);
+
+            refreshTokenOptions.onRefreshTokenSuccessCallback &&
+                refreshTokenOptions.onRefreshTokenSuccessCallback(token);
         });
 
-        this._intervalSubscription = setInterval(async () => {
+        this._intervalSubscription = setInterval(async () : Promise<void> => {
 
             if (this._aborted) return;
 

@@ -1,4 +1,2 @@
-export * from "./JwtSimpleServerClient";
-
-import { JwtSimpleServerClient } from "./jwtSimpleServerClient";
-
+export * from "./jwtSimpleServerClient";
+export * from "./jwtRefreshTokenService";

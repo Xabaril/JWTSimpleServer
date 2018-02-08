@@ -5,7 +5,7 @@ import { Observable } from './observable';
 export interface Token {
     accessToken: string;
     refreshToken: string;
-    expiresAt: Date;
+    expiresAt: string;
 }
 
 export interface PasswordGrandTypeCredentials {

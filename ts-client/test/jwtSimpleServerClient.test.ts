@@ -36,6 +36,7 @@ describe("JwtSimpleServerClient should", () => {
         });
 
         let token = await simpleServerClient.requestAccessToken({userName: "foo", password:"bar"});
+        
         expect(beforeTokenRequestObserver).toHaveBeenCalled();
     });
 });

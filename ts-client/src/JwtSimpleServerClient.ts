@@ -1,5 +1,6 @@
 import { HttpClient, XMLHttpRequestClient } from "./http/httpClient";
 import { HttpResponse } from "./http/httpResponse";
+import { Observable } from './observable';
 
 export interface Token {
     accessToken: string;
@@ -23,19 +24,41 @@ export class SimpleServerClientOptions {
 }
 
 export class JwtSimpleServerClient {
+
+    private static _instance: JwtSimpleServerClient;
     private _httpClient: HttpClient;
-    public constructor(private options: SimpleServerClientOptions) {
+    
+    public onBeforeRequestAccessToken : Observable<void> = new Observable<void>();
+    public onRequestAccessTokenSuccess : Observable<Token> = new Observable<Token>();
+
+    public onBeforeRequestRefreshToken : Observable<void> = new Observable<void>();
+    public onRequestRefreshTokenSuccess : Observable<Token> = new Observable<Token>();
+
+
+    private constructor(private options: SimpleServerClientOptions) {
         this._httpClient = options.httpClient || new XMLHttpRequestClient();
+        JwtSimpleServerClient._instance = this;
+    }
+
+    public static Create(options: SimpleServerClientOptions) {
+        return JwtSimpleServerClient._instance ? JwtSimpleServerClient._instance : new JwtSimpleServerClient(options);
+    }
+
+    public static get Instance() {
+        if (!JwtSimpleServerClient._instance) {
+            throw Error("jwtSimpleServerClient has not being initialized");
+        }
+        return JwtSimpleServerClient._instance;
     }
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {
         let requestContent = `grand_type=password&username=${credentials.userName}&password=${credentials.password}}`;
         return this._postTokenRequest(requestContent);
     }
-    public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {             
+    public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {
         let content = `grand_type=refresh_token&access_token=${credentials.refreshToken}`;
-        return this._postTokenRequest(content);        
+        return this._postTokenRequest(content);
     }
-    
+
     private async _postTokenRequest(content: string): Promise<Token> {
         let { host, tokenEndpoint } = this.options;
         let response = await this._httpClient.post(`${host}${tokenEndpoint}`, {

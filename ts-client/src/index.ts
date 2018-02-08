@@ -1,5 +1,4 @@
 export * from "./JwtSimpleServerClient";
-import { JwtSimpleServerClient } from "./JwtSimpleServerClient";
 
-let jwtClient : JwtSimpleServerClient = new JwtSimpleServerClient();
-    
+import { JwtSimpleServerClient } from "./jwtSimpleServerClient";
+

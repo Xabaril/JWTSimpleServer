@@ -52,19 +52,19 @@ export class JwtSimpleServerClient {
     }
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {
         
-        this.onBeforeRequestAccessToken.notify();
+        this.onBeforeRequestAccessToken.notify(undefined);
         let requestContent = `grand_type=password&username=${credentials.userName}&password=${credentials.password}}`;
         
-        let token =  this._postTokenRequest(requestContent);
+        let token = await this._postTokenRequest(requestContent);
         this.onRequestAccessTokenSuccess.notify(token);
 
         return token;
     }
     public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {
-        this.onBeforeRequestRefreshToken.notify();        
+        this.onBeforeRequestRefreshToken.notify(undefined);        
         let content = `grand_type=refresh_token&access_token=${credentials.refreshToken}`;        
         
-        let token =  this._postTokenRequest(content);
+        let token = await  this._postTokenRequest(content);
         this.onRequestRefreshTokenSuccess.notify(token);
         return token;
     }

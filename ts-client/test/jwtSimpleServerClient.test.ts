@@ -32,11 +32,11 @@ describe("JwtSimpleServerClient should", () => {
         let beforeTokenRequestObserver = jest.fn();
         simpleServerClient.onBeforeRequestAccessToken.subscribe(beforeTokenRequestObserver);        
         simpleServerClient.onRequestAccessTokenSuccess.subscribe(token => {
-            expect(token).toEqual(token);
+            expect(token).toEqual(mockToken);
         });
 
         let token = await simpleServerClient.requestAccessToken({userName: "foo", password:"bar"});
-        
+
         expect(beforeTokenRequestObserver).toHaveBeenCalled();
     });
 });

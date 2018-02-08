@@ -25,8 +25,9 @@ namespace JWTSimpleServer
         {
             var expiresDate = _options.Expires();
             var startingDate = _options.NotBefore();
+            var createdAt = DateTime.UtcNow;
 
-            claims.Add(new Claim("DateCreated", DateTime.UtcNow.ToString()));
+            claims.Add(new Claim("DateCreated", createdAt.ToString()));
 
             var jwt = new JwtSecurityToken(
                 issuer: _options.Issuer,
@@ -44,7 +45,7 @@ namespace JWTSimpleServer
             var refreshToken = _refreshTokenStore.GenerateRefreshToken();
 
             await _refreshTokenStore.StoreTokenAsync(
-                Token.Create(encodedAccessToken, refreshToken, DateTime.UtcNow)
+                Token.Create(encodedAccessToken, refreshToken, createdAt)
             );
 
             return new JwtTokenResponse()

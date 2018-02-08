@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
@@ -65,7 +66,7 @@ namespace JWTSimpleServer
                 else
                 {
                     var jwtSecurityToken = new JwtSecurityTokenHandler().ReadJwtToken(token.AccessToken);
-                    var jwtToken = _jwtTokenEncoder.WriteToken(jwtSecurityToken.Claims);
+                    var jwtToken = await _jwtTokenEncoder.WriteToken(jwtSecurityToken.Claims.ToList());
                     await _refreshTokenStore.InvalidateRefreshTokenAsync(token.RefreshToken);
                     await WriteResponseAsync(StatusCodes.Status200OK, context, JsonConvert.SerializeObject(jwtToken));
                 }

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\JWTSimpleServer.InMemoryRefreshTokenStore\JWTSimpleServer.InMemoryRefreshTokenStore.csproj" />
     <ProjectReference Include="..\..\src\JWTSimpleServer\JWTSimpleServer.csproj" />
   </ItemGroup>
 

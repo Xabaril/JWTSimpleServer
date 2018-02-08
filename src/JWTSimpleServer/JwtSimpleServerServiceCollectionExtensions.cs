@@ -1,6 +1,7 @@
 ﻿using JWTSimpleServer;
 using JWTSimpleServer.Abstractions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(jwtTokenOptions.IssuerSigningKey));
             };
-            services.AddSingleton<IRefreshTokenStore,NoRefreshTokenStore>();
+            services.TryAddSingleton<IRefreshTokenStore,NoRefreshTokenStore>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {

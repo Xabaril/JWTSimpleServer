@@ -16,24 +16,36 @@ namespace FunctionalTests
     public class TestServerBuilder
     {
         private IAuthenticationProvider authProvider;
+        private bool _useInMemoryStore = false;
         public TestServerBuilder WithSuccessAuthentication()
         {
             authProvider = new FakeSuccessAuthenticationProvider();
             return this;
         }
         
+        public TestServerBuilder WithInMemoryStore()
+        {
+            _useInMemoryStore = true;
+            return this;
+        }
         public TestServer Build()
         {
             var webhostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddJwtSimpleServer(options => { })                                           
+                    var serviceCollection = services.AddJwtSimpleServer(options => { })
                     .AddTransient(ctx =>
                     {
                         return authProvider;
-                    })
-                    .AddMvcCore()
-                    .AddAuthorization();
+                    });
+
+                    if (_useInMemoryStore)
+                    {
+                        serviceCollection.AddJwtInMemoryRefreshTokenStore();
+                    }
+
+                    serviceCollection.AddMvcCore()
+                    .AddAuthorization();                    
 
                 }).Configure(app =>
                {
@@ -50,7 +62,7 @@ namespace FunctionalTests
         {
             public Task ValidateClientAuthentication(JwtSimpleServerContext context)
             {
-                context.Success(Enumerable.Empty<Claim>());
+                context.Success(Enumerable.Empty<Claim>().ToList());
                 return Task.CompletedTask;
             }
         }

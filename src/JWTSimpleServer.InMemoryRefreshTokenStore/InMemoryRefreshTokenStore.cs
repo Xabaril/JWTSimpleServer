@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using JWTSimpleServer.Abstractions;
 
 
@@ -6,24 +8,28 @@ namespace JWTSimpleServer.InMemoryRefreshTokenStore
 {
     public class InMemoryRefreshTokenStore : IRefreshTokenStore
     {
-        public string GenerateRefreshToken()
-        {
-            throw new System.NotImplementedException();
-        }
+        private readonly ConcurrentDictionary<string, Token> _tokens = new ConcurrentDictionary<string, Token>();
 
         public Task<Token> GetTokenAsync(string refreshToken)
         {
-            throw new System.NotImplementedException();
+            var token = _tokens[refreshToken] ?? null;
+            return Task.FromResult(token);
         }
 
         public Task InvalidateRefreshTokenAsync(string refreshToken)
         {
-            throw new System.NotImplementedException();
+            _tokens.TryRemove(refreshToken, out var token);
+            return Task.CompletedTask;
         }
 
         public Task StoreTokenAsync(Token token)
         {
-            throw new System.NotImplementedException();
+            _tokens.TryAdd(token.RefreshToken, token);
+            return Task.CompletedTask;
+        }
+        public string GenerateRefreshToken()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
     }
 }

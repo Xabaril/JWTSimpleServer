@@ -22,7 +22,7 @@ namespace JWTSimpleServer
         public string Password { get; }
         private bool _contextValidated = false;
         private string _errorMessage = ServerMessages.InvalidAuthentication;
-        internal IEnumerable<Claim> Claims { get; private set;  } = null;
+        internal List<Claim> Claims { get; private set;  } = null;
         internal bool IsValid() => _contextValidated;
 
         internal string GetError() => _errorMessage;
@@ -32,7 +32,7 @@ namespace JWTSimpleServer
             _contextValidated = false;
             _errorMessage = errorMessage;
         }
-        public void Success(IEnumerable<Claim> claims)
+        public void Success(List<Claim> claims)
         {
             _contextValidated = true;
             Claims = claims;

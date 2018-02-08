@@ -28,5 +28,16 @@ namespace FunctionalTests
 
             return new FormUrlEncodedContent(formValues);
         }
+
+        public static FormUrlEncodedContent ARefreshTokenGranType(string refreshToken)
+        {
+            var formValues = new Dictionary<string, string>
+            {
+                {"grant_type", "refresh_token"},
+                {"refresh_token", refreshToken }                
+            };
+
+            return new FormUrlEncodedContent(formValues);
+        }
     }
 }

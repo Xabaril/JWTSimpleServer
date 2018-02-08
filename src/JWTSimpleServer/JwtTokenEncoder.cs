@@ -21,10 +21,12 @@ namespace JWTSimpleServer
             _options = options;
             _refreshTokenStore = refreshTokenStore;
         }
-        public async Task<JwtTokenResponse> WriteToken(IEnumerable<Claim> claims)
+        public async Task<JwtTokenResponse> WriteToken(List<Claim> claims)
         {
             var expiresDate = _options.Expires();
             var startingDate = _options.NotBefore();
+
+            claims.Add(new Claim("DateCreated", DateTime.UtcNow.ToString()));
 
             var jwt = new JwtSecurityToken(
                 issuer: _options.Issuer,

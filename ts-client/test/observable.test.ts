@@ -14,13 +14,17 @@ describe("Observable should", () => {
 
         it("should notify observers when published", () => {
                 let observable = new Observable<Date>();
-                let mockObserver = jest.fn();
+                
+                let fistMockObserver = jest.fn();
+                let secondMockObserver = jest.fn();
                 
                 let date = new Date();
-                observable.subscribe(mockObserver);
+                observable.subscribe(fistMockObserver);
+                observable.subscribe(secondMockObserver);
                 observable.notify(date);
 
-                expect(mockObserver).toHaveBeenCalledWith(date);
+                expect(fistMockObserver).toHaveBeenCalledWith(date);
+                expect(secondMockObserver).toHaveBeenCalledWith(date);
         });
 
         it('should remove an observer', () => {

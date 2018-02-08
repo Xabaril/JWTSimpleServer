@@ -27,7 +27,10 @@ export class Observable<T> {
     }
 
     public notify(eventData: T): void {
-        for (let observer of this._observers) {
+        
+        if(!this.hasObservers()) return;
+
+        for (let observer of this._observers) {            
             if (observer.scope) {
                 observer.callback.call(observer.scope, eventData);
             }

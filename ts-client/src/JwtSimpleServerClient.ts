@@ -51,12 +51,22 @@ export class JwtSimpleServerClient {
         return JwtSimpleServerClient._instance;
     }
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {
+        
+        this.onBeforeRequestAccessToken.notify();
         let requestContent = `grand_type=password&username=${credentials.userName}&password=${credentials.password}}`;
-        return this._postTokenRequest(requestContent);
+        
+        let token =  this._postTokenRequest(requestContent);
+        this.onRequestAccessTokenSuccess.notify(token);
+
+        return token;
     }
     public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {
-        let content = `grand_type=refresh_token&access_token=${credentials.refreshToken}`;
-        return this._postTokenRequest(content);
+        this.onBeforeRequestRefreshToken.notify();        
+        let content = `grand_type=refresh_token&access_token=${credentials.refreshToken}`;        
+        
+        let token =  this._postTokenRequest(content);
+        this.onRequestRefreshTokenSuccess.notify(token);
+        return token;
     }
 
     private async _postTokenRequest(content: string): Promise<Token> {

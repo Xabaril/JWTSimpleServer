@@ -1,10 +1,15 @@
 const path = require('path');
 
 module.exports = {
-    entry: "./src/index.ts",
+    entry: "./index.ts",
+    context: path.resolve(__dirname, "src"),
     output: {
-        path: path.resolve(__dirname, '../../dist'),
-        filename: "simple-server-client.js"
+        path: path.resolve(__dirname, './dist'),
+        filename: "simple-server-client.js",
+        libraryTarget: 'window'
+    },
+    resolve: {
+        extensions: ['.js', '.ts']
     },
     module: {
         loaders: [

@@ -122,16 +122,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var httpClient_1 = __webpack_require__(2);
 var observable_1 = __webpack_require__(5);
-var SimpleServerClientOptions = /** @class */ (function () {
-    function SimpleServerClientOptions() {
+var ClientOptions = /** @class */ (function () {
+    function ClientOptions() {
         this.tokenEndpoint = "/token";
         this.host = window.location.origin;
     }
-    return SimpleServerClientOptions;
+    return ClientOptions;
 }());
-exports.SimpleServerClientOptions = SimpleServerClientOptions;
-var JwtSimpleServerClient = /** @class */ (function () {
-    function JwtSimpleServerClient(options) {
+exports.ClientOptions = ClientOptions;
+var ServerClient = /** @class */ (function () {
+    function ServerClient(options) {
         this.options = options;
         this.onBeforeRequestAccessToken = new observable_1.Observable();
         this.onRequestAccessTokenSuccess = new observable_1.Observable();
@@ -139,7 +139,7 @@ var JwtSimpleServerClient = /** @class */ (function () {
         this.onRequestRefreshTokenSuccess = new observable_1.Observable();
         this._httpClient = options.httpClient || new httpClient_1.XMLHttpRequestClient();
     }
-    JwtSimpleServerClient.prototype.requestAccessToken = function (credentials) {
+    ServerClient.prototype.requestAccessToken = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
             var requestContent, token;
             return __generator(this, function (_a) {
@@ -156,7 +156,7 @@ var JwtSimpleServerClient = /** @class */ (function () {
             });
         });
     };
-    JwtSimpleServerClient.prototype.refreshAccessToken = function (credentials) {
+    ServerClient.prototype.refreshAccessToken = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
             var content, token;
             return __generator(this, function (_a) {
@@ -173,7 +173,7 @@ var JwtSimpleServerClient = /** @class */ (function () {
             });
         });
     };
-    JwtSimpleServerClient.prototype._postTokenRequest = function (content) {
+    ServerClient.prototype._postTokenRequest = function (content) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, host, tokenEndpoint, response;
             return __generator(this, function (_b) {
@@ -190,12 +190,12 @@ var JwtSimpleServerClient = /** @class */ (function () {
             });
         });
     };
-    JwtSimpleServerClient.prototype._buildTokenFromResponse = function (response) {
+    ServerClient.prototype._buildTokenFromResponse = function (response) {
         return JSON.parse(response.content);
     };
-    return JwtSimpleServerClient;
+    return ServerClient;
 }());
-exports.JwtSimpleServerClient = JwtSimpleServerClient;
+exports.ServerClient = ServerClient;
 
 
 /***/ }),
@@ -433,12 +433,12 @@ var RefreshTokenServiceOptions = /** @class */ (function () {
     return RefreshTokenServiceOptions;
 }());
 exports.RefreshTokenServiceOptions = RefreshTokenServiceOptions;
-var JwtRefreshTokenService = /** @class */ (function () {
-    function JwtRefreshTokenService(client) {
+var RefreshTokenService = /** @class */ (function () {
+    function RefreshTokenService(client) {
         this.client = client;
         this._aborted = false;
     }
-    JwtRefreshTokenService.prototype.start = function (refreshTokenOptions) {
+    RefreshTokenService.prototype.start = function (refreshTokenOptions) {
         var _this = this;
         this._aborted = false;
         this._ensureOptions(refreshTokenOptions);
@@ -462,7 +462,7 @@ var JwtRefreshTokenService = /** @class */ (function () {
             });
         }); }, refreshTokenOptions.intervalSeconds * 1000);
     };
-    JwtRefreshTokenService.prototype.stop = function () {
+    RefreshTokenService.prototype.stop = function () {
         this._aborted = true;
         if (this._intervalSubscription !== 0) {
             clearInterval(this._intervalSubscription);
@@ -472,7 +472,7 @@ var JwtRefreshTokenService = /** @class */ (function () {
             this.client.onRequestAccessTokenSuccess.remove(this._refreshSubscription);
         }
     };
-    JwtRefreshTokenService.prototype._ensureOptions = function (options) {
+    RefreshTokenService.prototype._ensureOptions = function (options) {
         if (!options.onRefreshTokenSuccessCallback) {
             throw Error("You must provide a callback to start the RefreshTokenService");
         }
@@ -480,9 +480,9 @@ var JwtRefreshTokenService = /** @class */ (function () {
             throw Error("You must provide the refresh token interval");
         }
     };
-    return JwtRefreshTokenService;
+    return RefreshTokenService;
 }());
-exports.JwtRefreshTokenService = JwtRefreshTokenService;
+exports.RefreshTokenService = RefreshTokenService;
 
 
 /***/ })

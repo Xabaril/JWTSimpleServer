@@ -16,14 +16,13 @@ export interface RefreshTokenGrandTypeCredentials {
     refreshToken: string;
 }
 
-
-export class SimpleServerClientOptions {
+export class ClientOptions {
     public tokenEndpoint: string = "/token";
     public host: string = window.location.origin;
     public httpClient?: HttpClient;
 }
 
-export class JwtSimpleServerClient {    
+export class ServerClient {    
     private _httpClient?: HttpClient;   
 
     public onBeforeRequestAccessToken : Observable<void> = new Observable<void>();
@@ -32,8 +31,7 @@ export class JwtSimpleServerClient {
     public onBeforeRequestRefreshToken : Observable<void> = new Observable<void>();
     public onRequestRefreshTokenSuccess : Observable<Token> = new Observable<Token>();
 
-
-    private constructor(private options: SimpleServerClientOptions) { 
+    public constructor(private options: ClientOptions) { 
         this._httpClient = options.httpClient || new XMLHttpRequestClient();      
     }    
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {

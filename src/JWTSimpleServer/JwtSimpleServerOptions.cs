@@ -9,7 +9,7 @@ namespace JWTSimpleServer
     {
         public string Path { get; set; } = "/token";
         public string Issuer { get; set; } = Constants.DefaultIssuer;
-        public string IssuerSigningKey { get; set; } = Constants.DefaultSigningKey;
+        public string IssuerSigningKey { get; set; }
         public Func<DateTime> NotBefore = () => DateTime.UtcNow;
         public Func<DateTime> Expires = () => DateTime.UtcNow.AddMinutes(15);        
         public void UseRefreshToken() => _UseRefreshToken = true;        

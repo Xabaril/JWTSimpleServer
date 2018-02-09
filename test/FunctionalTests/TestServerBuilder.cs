@@ -33,7 +33,9 @@ namespace FunctionalTests
             var webhostBuilder = new WebHostBuilder()
                 .ConfigureServices(services =>
                 {
-                    var serviceCollection = services.AddJwtSimpleServer(options => { })
+                    var serviceCollection = services.AddJwtSimpleServer(options => {
+                        options.IssuerSigningKey = Constants.DefaultSigningKey;
+                    })
                     .AddTransient(ctx =>
                     {
                         return authProvider;
@@ -50,7 +52,7 @@ namespace FunctionalTests
                 }).Configure(app =>
                {
                    app.UseJwtSimpleServer(setup => {
-                       
+                       setup.IssuerSigningKey = Constants.DefaultSigningKey;
                    })
                    .UseMvc();
                });

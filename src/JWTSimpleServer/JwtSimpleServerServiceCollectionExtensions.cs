@@ -20,6 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 throw new ArgumentNullException(nameof(jwtTokenOptions.IssuerSigningKey));
             };
+
             services.TryAddSingleton<IRefreshTokenStore,NoRefreshTokenStore>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

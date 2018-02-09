@@ -12,6 +12,11 @@ namespace Microsoft.AspNetCore.Builder
             var simpleServerOptions = new JwtSimpleServerOptions();
             serverSetup(simpleServerOptions);
 
+            if (string.IsNullOrEmpty(simpleServerOptions.IssuerSigningKey))
+            {
+                throw new ArgumentNullException(nameof(JwtSimpleServerOptions.IssuerSigningKey));
+            }
+
             app.MapWhen( context => IsValidJwtMiddlewareRequest(context, simpleServerOptions),                
                       appBuilder => appBuilder.UseMiddleware<JwtSimpleServerMiddleware>(simpleServerOptions));
 

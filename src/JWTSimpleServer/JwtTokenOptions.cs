@@ -8,6 +8,6 @@ namespace JWTSimpleServer
     public class JwtTokenOptions
     { 
         public string ValidIssuer { get; set; } = Constants.DefaultIssuer;
-        public string IssuerSigningKey { get; set; } = Constants.DefaultSigningKey;
+        public string IssuerSigningKey { get; set; }
     }
 }

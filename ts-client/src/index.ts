@@ -1,2 +1,2 @@
-export * from "./jwtSimpleServerClient";
-export * from "./jwtRefreshTokenService";
+export * from "./serverClient";
+export * from "./refreshTokenService";

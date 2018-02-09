@@ -1,5 +1,4 @@
-import { JwtSimpleServerClient } from './jwtSimpleServerClient';
-import { Token } from "./jwtSimpleServerClient";
+import { ServerClient, Token } from './serverClient';
 import { Observer } from './observable';
 
 export class RefreshTokenServiceOptions {
@@ -9,12 +8,12 @@ export class RefreshTokenServiceOptions {
         public onRefreshTokenSuccessCallback?: (eventData: Token) => void) { }
 }
 
-export class JwtRefreshTokenService {
+export class RefreshTokenService {
     private _intervalSubscription: any;
     private _aborted: boolean = false;
     private _refreshSubscription?: Observer<Token>;
 
-    constructor(private client: JwtSimpleServerClient) { }
+    constructor(private client: ServerClient) { }
 
     start(refreshTokenOptions: RefreshTokenServiceOptions) {
 

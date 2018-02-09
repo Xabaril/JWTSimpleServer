@@ -1,13 +1,13 @@
 import {
-    JwtSimpleServerClient,
-    SimpleServerClientOptions,
+    ServerClient,
+    ClientOptions,
     Token
-} from "../src/JwtSimpleServerClient";
+} from "../src/serverClient";
 import { HttpResponse } from "../src/http";
 import { Observable, Observer} from "../src/observable";
 import createMockHttpClient from "./mocks/httpClientMock";
 
-let simpleServerOptions: SimpleServerClientOptions = new SimpleServerClientOptions();
+let clientOptions : ClientOptions = new ClientOptions();
 let mockToken = {
     refreshToken: "foo",
     accessToken: "bar",
@@ -17,8 +17,8 @@ let mockToken = {
 describe("JwtSimpleServerClient should", () => {
     it("retrieve a token with configured http client", async () => {
         let mockResponse = createSuccessResponseFrom(mockToken);
-        simpleServerOptions.httpClient = createMockHttpClient(() => mockResponse);
-        let simpleServerClient: JwtSimpleServerClient = JwtSimpleServerClient.Create(simpleServerOptions);
+        clientOptions.httpClient = createMockHttpClient(() => mockResponse);
+        let simpleServerClient: ServerClient = new ServerClient(clientOptions);
 
         let token: Token = await simpleServerClient.requestAccessToken({ userName: "scott", password: "tiger" });
 
@@ -27,8 +27,8 @@ describe("JwtSimpleServerClient should", () => {
 
     it("notify observers before and after token request success", async () => {
         let mockResponse = createSuccessResponseFrom(mockToken);
-        simpleServerOptions.httpClient = createMockHttpClient(() => mockResponse);
-        let simpleServerClient: JwtSimpleServerClient = JwtSimpleServerClient.Create(simpleServerOptions);
+        clientOptions.httpClient = createMockHttpClient(() => mockResponse);
+        let simpleServerClient: ServerClient = new ServerClient(clientOptions);
         let beforeTokenRequestObserver = jest.fn();
         simpleServerClient.onBeforeRequestAccessToken.subscribe(beforeTokenRequestObserver);        
         simpleServerClient.onRequestAccessTokenSuccess.subscribe(token => {

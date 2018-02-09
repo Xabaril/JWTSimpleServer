@@ -6,6 +6,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: "simple-server-client.js",
+        library : 'JwtSimpleServer',
         libraryTarget: 'window'
     },
     resolve: {

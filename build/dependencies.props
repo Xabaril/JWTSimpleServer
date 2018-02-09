@@ -11,6 +11,7 @@
     <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.0.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>
     <MicrosoftAspNetCoreAuthorizationPackageVersion>2.0.1</MicrosoftAspNetCoreAuthorizationPackageVersion>
     <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.0.1</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>2.0.1</MicrosoftEntityFrameworkCorePackageVersion>
     <FluentAssertionsPackageVersion>5.0.0</FluentAssertionsPackageVersion>    
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
     <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>

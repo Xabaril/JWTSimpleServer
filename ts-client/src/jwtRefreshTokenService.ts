@@ -3,9 +3,10 @@ import { Token } from "./jwtSimpleServerClient";
 import { Observer } from './observable';
 
 export class RefreshTokenServiceOptions {
-    intervalSeconds: number | null = null;
-    refreshToken: string = "";
-    onRefreshTokenSuccessCallback?: (eventData: Token) => void;
+    constructor(
+       public intervalSeconds: number | null = null,
+       public refreshToken: string = "",
+       public onRefreshTokenSuccessCallback?: (eventData: Token) => void) { }
 }
 
 export class JwtRefreshTokenService {
@@ -26,7 +27,7 @@ export class JwtRefreshTokenService {
                 refreshTokenOptions.onRefreshTokenSuccessCallback(token);
         });
 
-        this._intervalSubscription = setInterval(async () : Promise<void> => {
+        this._intervalSubscription = setInterval(async (): Promise<void> => {
 
             if (this._aborted) return;
 

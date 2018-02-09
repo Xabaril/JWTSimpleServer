@@ -1,10 +1,10 @@
 import { HttpClient, HttpResponse, HttpRequest } from "../../src/http";
 
 class HttpClientMock extends HttpClient {
-    public mockResponseFunction: () => HttpResponse;
+    public mockResponseFunction?: () => HttpResponse;
     public send(request: HttpRequest): Promise<HttpResponse> {
         return new Promise<HttpResponse>((res, rej) => {
-            res(this.mockResponseFunction());
+            res(this.mockResponseFunction!());
         });
     }
 }

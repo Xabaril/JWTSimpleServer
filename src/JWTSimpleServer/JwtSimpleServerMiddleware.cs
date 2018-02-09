@@ -21,7 +21,8 @@ namespace JWTSimpleServer
         private readonly RequestDelegate _next;
         private readonly JwtTokenEncoder _jwtTokenEncoder;
 
-        public JwtSimpleServerMiddleware(RequestDelegate next,
+        public JwtSimpleServerMiddleware(
+            RequestDelegate next,
             IAuthenticationProvider authenticationProvider,
             IRefreshTokenStore refreshTokenStore,
             JwtSimpleServerOptions serverOptions)

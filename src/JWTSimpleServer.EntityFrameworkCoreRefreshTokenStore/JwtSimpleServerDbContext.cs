@@ -8,7 +8,7 @@ namespace JWTSimpleServer.EntityFrameworkCoreRefreshTokenStore
     /// </summary>
     public class JwtSimpleServerDbContext : DbContext
     {
-        public DbSet<Token> Tokens { get; set; }
+        public DbSet<JwtToken> Tokens { get; set; }
 
         public JwtSimpleServerDbContext(DbContextOptions<JwtSimpleServerDbContext> options) : base(options)
         {

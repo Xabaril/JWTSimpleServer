@@ -6,20 +6,18 @@ namespace JWTSimpleServer
 {
     public class Token
     {
-        public string AccessToken { get; }
-        public string RefreshToken { get; }
-        public DateTime CreatedAt { get; }
-
-        private Token(string accessToken, string refreshToken, DateTime createdAt)
-        {
-            AccessToken = accessToken;
-            RefreshToken = refreshToken;
-            CreatedAt = createdAt;
-        }   
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime CreatedAt { get; set; } 
 
         public static Token Create(string accessToken, string refreshToken, DateTime createdAt)
         {
-            return new Token(accessToken, refreshToken, createdAt);
+            return new Token
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                CreatedAt = createdAt
+            };
         }
     }
 }

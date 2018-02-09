@@ -17,14 +17,21 @@ namespace JWTSimpleServer.EntityFrameworkCoreRefreshTokenStore
             this.context = context ?? throw new ArgumentException(nameof(context));
         }
 
-        public Task<Token> GetTokenAsync(string refreshToken)
+        public async Task<Token> GetTokenAsync(string refreshToken)
         {
-            return context.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshToken);
+            var token = await context.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshToken);
+
+            if (token != null)
+            {
+                return Token.Create(token.AccessToken, token.RefreshToken, token.CreatedAt);
+            }
+
+            return null;
         }
 
         public async Task InvalidateRefreshTokenAsync(string refreshToken)
         {
-            var token = await GetTokenAsync(refreshToken);
+            var token = await context.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshToken);
 
             if (token != null)
             {
@@ -35,7 +42,13 @@ namespace JWTSimpleServer.EntityFrameworkCoreRefreshTokenStore
 
         public async Task StoreTokenAsync(Token token)
         {
-            await context.AddAsync(token);
+            if (token == null)
+            {
+                throw new ArgumentException(nameof(token));
+            }
+
+            var entity = Token.Create(token.AccessToken, token.RefreshToken, token.CreatedAt);
+            await context.AddAsync(entity);
             await context.SaveChangesAsync();
         }
 

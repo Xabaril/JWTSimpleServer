@@ -13,6 +13,7 @@
     <MicrosoftAspNetCoreAuthorizationPackageVersion>2.0.1</MicrosoftAspNetCoreAuthorizationPackageVersion>
     <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.0.1</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
     <MicrosoftEntityFrameworkCorePackageVersion>2.0.1</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCoreSqlServerPackageVersion>2.0.1</MicrosoftEntityFrameworkCoreSqlServerPackageVersion>
     <FluentAssertionsPackageVersion>5.0.0</FluentAssertionsPackageVersion>    
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
     <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
@@ -21,5 +22,6 @@
 
   <PropertyGroup Label="CLI Tools Versions">
     <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
+    <MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>2.0.0</MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>
   </PropertyGroup>
 </Project>

@@ -9,7 +9,7 @@ namespace JWTSimpleServer
     {
         private JwtSimpleServerContext(string userName, string password)
         {
-            UserName = UserName;
+            UserName = userName;
             Password = password;
         }
 

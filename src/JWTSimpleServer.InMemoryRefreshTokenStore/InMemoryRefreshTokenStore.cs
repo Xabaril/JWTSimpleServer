@@ -12,7 +12,11 @@ namespace JWTSimpleServer.InMemoryRefreshTokenStore
 
         public Task<Token> GetTokenAsync(string refreshToken)
         {
-            var token = _tokens[refreshToken] ?? null;
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return null;
+            }
+            var token = _tokens[refreshToken];
             return Task.FromResult(token);
         }
 

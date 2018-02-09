@@ -3,9 +3,9 @@ import { HttpResponse } from "./http/httpResponse";
 import { Observable } from './observable';
 
 export interface Token {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: string;
+    access_token: string;
+    refresh_token: string;
+    expires_in: string;
 }
 
 export interface PasswordGrandTypeCredentials {
@@ -19,15 +19,13 @@ export interface RefreshTokenGrandTypeCredentials {
 
 export class SimpleServerClientOptions {
     public tokenEndpoint: string = "/token";
-    public host: string = window.location.host;
+    public host: string = window.location.origin;
     public httpClient?: HttpClient;
 }
 
-export class JwtSimpleServerClient {
+export class JwtSimpleServerClient {    
+    private _httpClient?: HttpClient;   
 
-    private static _instance: JwtSimpleServerClient;
-    private _httpClient: HttpClient;
-    
     public onBeforeRequestAccessToken : Observable<void> = new Observable<void>();
     public onRequestAccessTokenSuccess : Observable<Token> = new Observable<Token>();
 
@@ -35,25 +33,13 @@ export class JwtSimpleServerClient {
     public onRequestRefreshTokenSuccess : Observable<Token> = new Observable<Token>();
 
 
-    private constructor(private options: SimpleServerClientOptions) {
-        this._httpClient = options.httpClient || new XMLHttpRequestClient();
-        JwtSimpleServerClient._instance = this;
-    }
-
-    public static Create(options: SimpleServerClientOptions) {
-        return JwtSimpleServerClient._instance ? JwtSimpleServerClient._instance : new JwtSimpleServerClient(options);
-    }
-
-    public static get Instance() {
-        if (!JwtSimpleServerClient._instance) {
-            throw Error("jwtSimpleServerClient has not being initialized");
-        }
-        return JwtSimpleServerClient._instance;
-    }
+    private constructor(private options: SimpleServerClientOptions) { 
+        this._httpClient = options.httpClient || new XMLHttpRequestClient();      
+    }    
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {
         
         this.onBeforeRequestAccessToken.notify(undefined);
-        let requestContent = `grand_type=password&username=${credentials.userName}&password=${credentials.password}}`;
+        let requestContent = `grant_type=password&username=${credentials.userName}&password=${credentials.password}`;
         
         let token = await this._postTokenRequest(requestContent);
         this.onRequestAccessTokenSuccess.notify(token);
@@ -62,7 +48,7 @@ export class JwtSimpleServerClient {
     }
     public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {
         this.onBeforeRequestRefreshToken.notify(undefined);        
-        let content = `grand_type=refresh_token&access_token=${credentials.refreshToken}`;        
+        let content = `grant_type=refresh_token&refresh_token=${credentials.refreshToken}`;        
         
         let token = await  this._postTokenRequest(content);
         this.onRequestRefreshTokenSuccess.notify(token);
@@ -71,7 +57,7 @@ export class JwtSimpleServerClient {
 
     private async _postTokenRequest(content: string): Promise<Token> {
         let { host, tokenEndpoint } = this.options;
-        let response = await this._httpClient.post(`${host}${tokenEndpoint}`, {
+        let response = await this._httpClient!.post(`${host}${tokenEndpoint}`, {
             content
         });
         return this._buildTokenFromResponse(response);

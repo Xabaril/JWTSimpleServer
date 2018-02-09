@@ -6,6 +6,7 @@
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
+    <MicrosoftAspNetCoreAllPackageVersion>2.0.5</MicrosoftAspNetCoreAllPackageVersion>
     <MicrosoftAspNetCoreMvcCorePackageVersion>2.0.2</MicrosoftAspNetCoreMvcCorePackageVersion>
     <MicrosoftAspNetCoreHttpAbstractionsPackageVersion>2.0.1</MicrosoftAspNetCoreHttpAbstractionsPackageVersion>
     <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.0.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>

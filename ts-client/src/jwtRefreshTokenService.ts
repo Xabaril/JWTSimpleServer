@@ -4,9 +4,9 @@ import { Observer } from './observable';
 
 export class RefreshTokenServiceOptions {
     constructor(
-       public intervalSeconds: number | null = null,
-       public refreshToken: string = "",
-       public onRefreshTokenSuccessCallback?: (eventData: Token) => void) { }
+        public intervalSeconds: number | null = null,
+        public refreshToken: string = "",
+        public onRefreshTokenSuccessCallback?: (eventData: Token) => void) { }
 }
 
 export class JwtRefreshTokenService {
@@ -21,7 +21,7 @@ export class JwtRefreshTokenService {
         this._aborted = false;
         this._ensureOptions(refreshTokenOptions);
 
-        this._refreshSubscription = this.client.onRequestAccessTokenSuccess.subscribe(token => {
+        this._refreshSubscription = this.client.onRequestRefreshTokenSuccess.subscribe(token => {
 
             refreshTokenOptions.onRefreshTokenSuccessCallback &&
                 refreshTokenOptions.onRefreshTokenSuccessCallback(token);
@@ -32,8 +32,7 @@ export class JwtRefreshTokenService {
             if (this._aborted) return;
 
             let token = await this.client.refreshAccessToken({ refreshToken: refreshTokenOptions.refreshToken })
-            refreshTokenOptions.refreshToken = token.refreshToken;
-            this.client.onRequestRefreshTokenSuccess.notify(token);
+            refreshTokenOptions.refreshToken = token.refresh_token;            
 
         }, refreshTokenOptions.intervalSeconds! * 1000);
     }

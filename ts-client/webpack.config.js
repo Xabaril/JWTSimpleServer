@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+    devtool: "sourcemap",
     entry: "./index.ts",
     context: path.resolve(__dirname, "src"),
     output: {

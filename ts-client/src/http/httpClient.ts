@@ -14,10 +14,14 @@ export abstract class HttpClient {
 }
 
 export class XMLHttpRequestClient extends HttpClient {
-    public send(request: HttpRequest): Promise<HttpResponse> {
+    public send(request: HttpRequest): Promise<HttpResponse> {        
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
+            xhr.open(request.method!, request.url!, true);
+
             xhr.setRequestHeader("X-Request-Client", "XMLHttpClient");
+            xhr.setRequestHeader("Content-type", request.contentType || "application/x-www-form-urlencoded");
+
             xhr.onload = () => {
                 if (xhr.status >= 200 && xhr.status < 300) {
                     resolve(new HttpResponse(xhr.status, xhr.statusText, xhr.response || xhr.responseText));
@@ -32,6 +36,7 @@ export class XMLHttpRequestClient extends HttpClient {
             xhr.ontimeout = () => {
                 reject( new HttpError("Operation timeout", 500));
             }
+            xhr.send(request.content || "");
         });
     }
     

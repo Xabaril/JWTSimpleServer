@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleServerEFCoreStorage",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTSimpleServer.MessagePackRefreshTokenStore", "src\JWTSimpleServer.MessagePackRefreshTokenStore\JWTSimpleServer.MessagePackRefreshTokenStore.csproj", "{4B0584E9-EA7B-4B48-83CB-F86FBDC29167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleServerMessagePackStorage", "SimpleServerMessagePackStorage\SimpleServerMessagePackStorage.csproj", "{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleServerMessagePackStorage", "samples\SimpleServerMessagePackStorage\SimpleServerMessagePackStorage.csproj", "{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,10 +75,10 @@ Global
 		{4B0584E9-EA7B-4B48-83CB-F86FBDC29167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B0584E9-EA7B-4B48-83CB-F86FBDC29167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B0584E9-EA7B-4B48-83CB-F86FBDC29167}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,7 +92,7 @@ Global
 		{9DDA6A11-9898-4250-842A-24E2DBB435BF} = {EA29F96B-996C-4724-9F20-E115EB0F0E4E}
 		{D25EB26D-CEFA-488A-B0F5-3908D6E73041} = {EA29F96B-996C-4724-9F20-E115EB0F0E4E}
 		{4B0584E9-EA7B-4B48-83CB-F86FBDC29167} = {AAECD48F-CFFE-4B45-93B6-54F4DB13712B}
-		{C85EE41C-A0AD-49DC-B9AD-10CC6DB42A6C} = {EA29F96B-996C-4724-9F20-E115EB0F0E4E}
+		{B7CDCF60-6B1B-4AEA-AA66-AC1FBCD38BBF} = {EA29F96B-996C-4724-9F20-E115EB0F0E4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29D6F500-ABDC-4D2D-810F-F7BE7A624499}

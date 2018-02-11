@@ -13,9 +13,11 @@ namespace JWTSimpleServer.MessagePackRefreshTokenStore
     {
         private readonly JwtStoreOptions _storeOptions;
         private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _readSemaphore = new SemaphoreSlim(1, 1);
         public MessagePackRefreshTokenStore(JwtStoreOptions storeOptions)
         {
             _storeOptions = storeOptions;
+            EnsureStore();
         }
 
         public async Task<Token> GetTokenAsync(string refreshToken)
@@ -23,7 +25,7 @@ namespace JWTSimpleServer.MessagePackRefreshTokenStore
             var tokenStore = await ReadBinaryStoreAsync();
             if (tokenStore.ContainsKey(refreshToken))
             {
-                return tokenStore[refreshToken];
+                return tokenStore[refreshToken].CopyTo();
             }
             return null;
         }
@@ -31,36 +33,43 @@ namespace JWTSimpleServer.MessagePackRefreshTokenStore
         public async Task InvalidateRefreshTokenAsync(string refreshToken)
         {
             var tokenStore = await ReadBinaryStoreAsync();
-            tokenStore.TryRemove(refreshToken, out Token token);
+            tokenStore.TryRemove(refreshToken, out JwtToken token);
             await WriteBinaryStoreAsync(tokenStore);
         }
 
         public async Task StoreTokenAsync(Token token)
         {
             var tokenStore = await ReadBinaryStoreAsync();
-            tokenStore.TryAdd(token.RefreshToken, token);
+            tokenStore.TryAdd(token.RefreshToken, JwtToken.CopyFrom(token));
             await WriteBinaryStoreAsync(tokenStore);
         }
 
-        private Task<ConcurrentDictionary<string, Token>> ReadBinaryStoreAsync()
+        private async Task<ConcurrentDictionary<string, JwtToken>> ReadBinaryStoreAsync()
         {
-            EnsureStore();
-            using (var binaryStore = new FileStream(_storeOptions.Path, FileMode.Open))
+            await _readSemaphore.WaitAsync();
+            try
             {
-                return MessagePackSerializer.DeserializeAsync<ConcurrentDictionary<string, Token>>(binaryStore);
+                using (var binaryStore = new FileStream(_storeOptions.Path, FileMode.Open))
+                {
+                    var bytes = new byte[binaryStore.Length];
+                    await binaryStore.ReadAsync(bytes, 0, (int)bytes.Length);
+                    return MessagePackSerializer.Deserialize<ConcurrentDictionary<string, JwtToken>>(bytes);
+                }
+            }
+            finally
+            {
+                _readSemaphore.Release();
             }
         }
 
-        private async Task WriteBinaryStoreAsync(ConcurrentDictionary<string, Token> store)
+        private async Task WriteBinaryStoreAsync(ConcurrentDictionary<string, JwtToken> store)
         {
             await _writeSemaphore.WaitAsync();
             try
             {
-                using (var binaryStore = new FileStream(_storeOptions.Path, FileMode.Append))
-                {
-                    var content = MessagePackSerializer.Serialize(binaryStore);
-                    await binaryStore.WriteAsync(content, 0, content.Length);
-                }
+                var content = MessagePackSerializer.Serialize(store);
+                File.WriteAllBytes(_storeOptions.Path, content);
+
             }
             finally
             {
@@ -72,7 +81,9 @@ namespace JWTSimpleServer.MessagePackRefreshTokenStore
         {
             if (!File.Exists(_storeOptions.Path))
             {
-                throw new Exception($"{nameof(MessagePackRefreshTokenStore)} : Error Trying to retrieve data. The store does not exist");
+                using (var fs = File.Create(_storeOptions.Path)) { };
+                var initialDictionary = new ConcurrentDictionary<string, JwtToken>();
+                WriteBinaryStoreAsync(initialDictionary).GetAwaiter().GetResult();
             }
         }
 

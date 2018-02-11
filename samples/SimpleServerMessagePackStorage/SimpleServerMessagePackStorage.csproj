@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\simple-server-client.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="$(MicrosoftAspNetCoreAllPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\JWTSimpleServer.MessagePackRefreshTokenStore\JWTSimpleServer.MessagePackRefreshTokenStore.csproj" />
+    <ProjectReference Include="..\..\src\JWTSimpleServer\JWTSimpleServer.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
             setup(jwtStoreOptions);
             services.AddSingleton<IRefreshTokenStore>
                 (sp => new MessagePackRefreshTokenStore(jwtStoreOptions));
+            
             return services;
         }
     }

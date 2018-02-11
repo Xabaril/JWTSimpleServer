@@ -35,7 +35,7 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
     }
   ```
 
-3. In the _ConfigureServices_ method of _Startup.cs_, register Xabaril, defining one or more features.
+3. In the _ConfigureServices_ method of _Startup.cs_, register JWTSimpleServer, defining one refresh token store.
 
 ```csharp
     public void ConfigureServices(IServiceCollection services)
@@ -50,7 +50,7 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
     }
 ```
   
-4. In the _Configure_ method, insert middleware to expose the generated Xabaril as JSON endpoint.
+4. In the _Configure_ method, insert middleware to expose the generated token.
 
 	```csharp
 	    public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript" src="simple-server-client.js"></script>
+    <script type="text/javascript">
+        var defaultServerOptions = new JwtSimpleServer.ClientOptions();
+        var simpleServerClient =  new JwtSimpleServer.ServerClient(defaultServerOptions);
+        simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" })
+            .then(token => {
+                var refreshToken = token.refresh_token;
+                var refreshService = new JwtSimpleServer.RefreshTokenService(simpleServerClient);
+
+                let onTokenRefreshedFunction = (token) => {
+                    console.log("Refresh token service:", token);
+                }
+                refreshService.start({
+                    intervalSeconds: 10,
+                    refreshToken,
+                    onRefreshTokenSuccessCallback: onTokenRefreshedFunction
+                });
+            });
+    </script>
+</body>
+</html>

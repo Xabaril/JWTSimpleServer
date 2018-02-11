@@ -47,7 +47,7 @@ namespace JWTSimpleServer.EntityFrameworkCoreRefreshTokenStore
                 throw new ArgumentException(nameof(token));
             }
 
-            var entity = Token.Create(token.AccessToken, token.RefreshToken, token.CreatedAt);
+            var entity = JwtToken.CopyFrom(token);
             await context.AddAsync(entity);
             await context.SaveChangesAsync();
         }

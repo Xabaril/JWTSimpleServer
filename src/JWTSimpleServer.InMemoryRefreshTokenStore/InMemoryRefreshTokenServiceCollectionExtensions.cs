@@ -11,6 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddJwtInMemoryRefreshTokenStore(this IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.AddSingleton<IRefreshTokenStore, InMemoryRefreshTokenStore>();
             return services;
         }

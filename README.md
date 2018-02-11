@@ -97,5 +97,15 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
 	Referer: https://localhost:44305/
 	Content-Length: 68
 
-	grant_type=password&username=demo&password=demo
+	grant_type:refresh_token&refresh_token:77e248a4a3814308931d63b10fb1e7f7
+	```
+	
+	HTTP Response
+	
+	```json
+	{
+		"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....",
+		"expires_in": 900,
+		"refresh_token": "3521442655fc4ec5b41a1b2d9ce846aa"
+	}
 	```

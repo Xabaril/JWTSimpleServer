@@ -18,6 +18,7 @@
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
     <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
     <MicrosoftAspNetCoreTestHostPackageVersion>2.0.1</MicrosoftAspNetCoreTestHostPackageVersion>
+    <MessagePackPackageVersion>1.7.3.4</MessagePackPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">

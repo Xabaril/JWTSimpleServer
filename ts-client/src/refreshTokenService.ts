@@ -1,5 +1,5 @@
 import { ServerClient, Token } from './serverClient';
-import { Observer } from './observable';
+import { Subscription } from './observable';
 
 export class RefreshTokenServiceOptions {
     constructor(
@@ -11,7 +11,7 @@ export class RefreshTokenServiceOptions {
 export class RefreshTokenService {
     private _intervalSubscription: any;
     private _aborted: boolean = false;
-    private _refreshSubscription?: Observer<Token>;
+    private _refreshSubscription?: Subscription;
 
     constructor(private client: ServerClient) { }
 
@@ -23,7 +23,7 @@ export class RefreshTokenService {
         this._refreshSubscription = this.client.onRequestRefreshTokenSuccess.subscribe(token => {
 
             refreshTokenOptions.onRefreshTokenSuccessCallback &&
-                refreshTokenOptions.onRefreshTokenSuccessCallback(token);
+                refreshTokenOptions.onRefreshTokenSuccessCallback(<Token>token);
         });
 
         this._intervalSubscription = setInterval(async (): Promise<void> => {
@@ -31,7 +31,7 @@ export class RefreshTokenService {
             if (this._aborted) return;
 
             let token = await this.client.refreshAccessToken({ refreshToken: refreshTokenOptions.refreshToken })
-            refreshTokenOptions.refreshToken = token.refresh_token;            
+            refreshTokenOptions.refreshToken = token.refresh_token;
 
         }, refreshTokenOptions.intervalSeconds! * 1000);
     }
@@ -43,7 +43,7 @@ export class RefreshTokenService {
             this._intervalSubscription = 0;
         }
         if (this._refreshSubscription) {
-            this.client.onRequestRefreshTokenSuccess.remove(this._refreshSubscription);
+            this._refreshSubscription.unsubscribe();
             this._refreshSubscription = undefined;
         }
     }

@@ -1,6 +1,6 @@
 import { HttpClient, XMLHttpRequestClient } from "./http/httpClient";
 import { HttpResponse } from "./http/httpResponse";
-import { Observable } from './observable';
+import { Subject } from './observable';
 
 export interface Token {
     access_token: string;
@@ -22,34 +22,34 @@ export class ClientOptions {
     public httpClient?: HttpClient;
 }
 
-export class ServerClient {    
-    private _httpClient?: HttpClient;   
+export class ServerClient {
+    private _httpClient?: HttpClient;
 
-    public onBeforeRequestAccessToken : Observable<void> = new Observable<void>();
-    public onRequestAccessTokenSuccess : Observable<Token> = new Observable<Token>();
+    public onBeforeRequestAccessToken: Subject<void> = new Subject<void>();
+    public onRequestAccessTokenSuccess: Subject<Token> = new Subject<Token>();
 
-    public onBeforeRequestRefreshToken : Observable<void> = new Observable<void>();
-    public onRequestRefreshTokenSuccess : Observable<Token> = new Observable<Token>();
+    public onBeforeRequestRefreshToken: Subject<void> = new Subject<void>();
+    public onRequestRefreshTokenSuccess: Subject<Token> = new Subject<Token>();
 
-    public constructor(private options: ClientOptions) { 
-        this._httpClient = options.httpClient || new XMLHttpRequestClient();      
-    }    
+    public constructor(private options: ClientOptions) {
+        this._httpClient = options.httpClient || new XMLHttpRequestClient();
+    }
     public async requestAccessToken(credentials: PasswordGrandTypeCredentials): Promise<Token> {
-        
-        this.onBeforeRequestAccessToken.notify(undefined);
+
+        this.onBeforeRequestAccessToken.next(undefined);
         let requestContent = `grant_type=password&username=${credentials.userName}&password=${credentials.password}`;
-        
+
         let token = await this._postTokenRequest(requestContent);
-        this.onRequestAccessTokenSuccess.notify(token);
+        this.onRequestAccessTokenSuccess.next(token);
 
         return token;
     }
     public async refreshAccessToken(credentials: RefreshTokenGrandTypeCredentials): Promise<Token> {
-        this.onBeforeRequestRefreshToken.notify(undefined);        
-        let content = `grant_type=refresh_token&refresh_token=${credentials.refreshToken}`;        
-        
-        let token = await  this._postTokenRequest(content);
-        this.onRequestRefreshTokenSuccess.notify(token);
+        this.onBeforeRequestRefreshToken.next(undefined);
+        let content = `grant_type=refresh_token&refresh_token=${credentials.refreshToken}`;
+
+        let token = await this._postTokenRequest(content);
+        this.onRequestRefreshTokenSuccess.next(token);
         return token;
     }
 

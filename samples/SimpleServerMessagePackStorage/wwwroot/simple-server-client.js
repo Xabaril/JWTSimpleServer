@@ -133,10 +133,10 @@ exports.ClientOptions = ClientOptions;
 var ServerClient = /** @class */ (function () {
     function ServerClient(options) {
         this.options = options;
-        this.onBeforeRequestAccessToken = new observable_1.Observable();
-        this.onRequestAccessTokenSuccess = new observable_1.Observable();
-        this.onBeforeRequestRefreshToken = new observable_1.Observable();
-        this.onRequestRefreshTokenSuccess = new observable_1.Observable();
+        this.onBeforeRequestAccessToken = new observable_1.Subject();
+        this.onRequestAccessTokenSuccess = new observable_1.Subject();
+        this.onBeforeRequestRefreshToken = new observable_1.Subject();
+        this.onRequestRefreshTokenSuccess = new observable_1.Subject();
         this._httpClient = options.httpClient || new httpClient_1.XMLHttpRequestClient();
     }
     ServerClient.prototype.requestAccessToken = function (credentials) {
@@ -145,12 +145,12 @@ var ServerClient = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.onBeforeRequestAccessToken.notify(undefined);
+                        this.onBeforeRequestAccessToken.next(undefined);
                         requestContent = "grant_type=password&username=" + credentials.userName + "&password=" + credentials.password;
                         return [4 /*yield*/, this._postTokenRequest(requestContent)];
                     case 1:
                         token = _a.sent();
-                        this.onRequestAccessTokenSuccess.notify(token);
+                        this.onRequestAccessTokenSuccess.next(token);
                         return [2 /*return*/, token];
                 }
             });
@@ -162,12 +162,12 @@ var ServerClient = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.onBeforeRequestRefreshToken.notify(undefined);
+                        this.onBeforeRequestRefreshToken.next(undefined);
                         content = "grant_type=refresh_token&refresh_token=" + credentials.refreshToken;
                         return [4 /*yield*/, this._postTokenRequest(content)];
                     case 1:
                         token = _a.sent();
-                        this.onRequestRefreshTokenSuccess.notify(token);
+                        this.onRequestRefreshTokenSuccess.next(token);
                         return [2 /*return*/, token];
                 }
             });
@@ -320,64 +320,371 @@ exports.HttpError = HttpError;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
-* Creates a new observer
-* @param callback defines the callback to call when the observer is notified
-* @param scope defines the current scope used to restore the JS context
-*/
-var Observer = /** @class */ (function () {
-    function Observer(callback, scope) {
-        if (scope === void 0) { scope = null; }
-        this.callback = callback;
-        this.scope = scope;
+ * Simple Subscription implementation.
+ */
+var Subscription = /** @class */ (function () {
+    function Subscription() {
+        /**
+         * Indicates whether this Subscription has already been unsubscribed.
+         * @type {boolean}
+         */
+        this.closed = false;
     }
-    return Observer;
-}());
-exports.Observer = Observer;
-/**
-* The Observable class is a simple implementation of the Observable pattern.
-*/
-var Observable = /** @class */ (function () {
-    function Observable() {
-        this._observers = new Array();
-    }
-    Observable.prototype.subscribe = function (callback) {
-        if (!callback)
-            throw Error("You should provide a callback to subscribe to an observable");
-        var observer = new Observer(callback);
-        this._observers.push(observer);
-        return observer;
+    /**
+     * Disposes the Subscription resources.
+     * @return {void}
+     */
+    Subscription.prototype.unsubscribe = function () {
+        this.closed = true;
+        return;
     };
-    Observable.prototype.notify = function (eventData) {
-        if (!this.hasObservers())
-            return;
-        for (var _i = 0, _a = this._observers; _i < _a.length; _i++) {
-            var observer = _a[_i];
-            if (observer.scope) {
-                observer.callback.call(observer.scope, eventData);
+    return Subscription;
+}());
+exports.Subscription = Subscription;
+/**
+ * Simple Subscriber implementation (aka Observer).
+ */
+var Subscriber = /** @class */ (function (_super) {
+    __extends(Subscriber, _super);
+    /**
+     * @constructor
+     * @param {Observer|Function} [observerOrNext] (optional) A Observer or a `next` handler.
+     * @param {Function} [error] (optional) The `error` handler.
+     * @param {Function} [complete] (optional) The `complete` handler.
+     */
+    function Subscriber(observerOrNext, error, complete) {
+        var _this = _super.call(this) || this;
+        _this._isStopped = false;
+        var next;
+        var context = _this;
+        switch (typeof observerOrNext) {
+            case 'function':
+                next = observerOrNext;
+                break;
+            case 'object':
+                var observer = observerOrNext;
+                next = observer.next;
+                error = observer.error;
+                complete = observer.complete;
+                context = Object.create(observer);
+                break;
+            default:
+                throw new Error('The observerOrNext must be a function or an object.');
+        }
+        _this._context = context;
+        _this._next = next;
+        _this._error = error;
+        _this._complete = complete;
+        return _this;
+    }
+    /**
+     * Creates a new Subscriber instance.
+     * @param {Function} [observerOrNext] (optional) The `next` handler.
+     * @param {Function} [error] (optional) The `error` handler.
+     * @param {Function} [complete] (optional) The `complete` handler.
+     * @return {Subscriber<T>} A new Observable instance.
+     */
+    Subscriber.create = function (observerOrNext, error, complete) {
+        return new Subscriber(observerOrNext, error, complete);
+    };
+    /**
+     * The Observer `next` notifications handler.
+     * @param {T} [value] The `next` value.
+     * @return {void}
+     */
+    Subscriber.prototype.next = function (value) {
+        if (!this._isStopped && this._next) {
+            try {
+                this._next.call(this._context, value);
+            }
+            catch (err) {
+                this._hostReportError(err);
+                this.unsubscribe();
+            }
+        }
+    };
+    /**
+     * The Observer `error` notifications handler.
+     * @param {any} [error] The `error` exception.
+     * @return {void}
+     */
+    Subscriber.prototype.error = function (error) {
+        if (!this._isStopped) {
+            if (this._error) {
+                try {
+                    this._error.call(this._context, error);
+                }
+                catch (err) {
+                    this._hostReportError(err);
+                }
             }
             else {
-                observer.callback(eventData);
+                this._hostReportError(error);
             }
+            this.unsubscribe();
         }
     };
-    Observable.prototype.remove = function (observer) {
-        if (!observer)
-            return false;
-        var index = this._observers.indexOf(observer);
-        if (index !== -1) {
-            this._observers.splice(index, 1);
-            return true;
+    /**
+     * The Observer `complete` notifications handler.
+     * @return {void}
+     */
+    Subscriber.prototype.complete = function () {
+        if (!this._isStopped) {
+            if (this._complete) {
+                try {
+                    this._complete.call(this._context);
+                }
+                catch (err) {
+                    this._hostReportError(err);
+                }
+            }
+            this.unsubscribe();
         }
-        return false;
     };
-    Observable.prototype.hasObservers = function () {
-        return this._observers.length > 0;
+    /**
+     * Disposes the Observer resources.
+     * @return {void}
+     */
+    Subscriber.prototype.unsubscribe = function () {
+        if (this.closed) {
+            return;
+        }
+        this._isStopped = true;
+        this._context = null;
+        _super.prototype.unsubscribe.call(this);
+    };
+    Subscriber.prototype._hostReportError = function (err) {
+        setTimeout(function () { throw err; });
+    };
+    return Subscriber;
+}(Subscription));
+exports.Subscriber = Subscriber;
+/**
+ * Symbol.Observable polyfill.
+ */
+function getSymbolObservable(context) {
+    var $$observable;
+    var Symbol = context.Symbol;
+    if (typeof Symbol === 'function') {
+        if (Symbol.observable) {
+            $$observable = Symbol.observable;
+        }
+        else {
+            $$observable = Symbol('observable');
+            Symbol.observable = $$observable;
+        }
+    }
+    else {
+        $$observable = '@@observable';
+    }
+    return $$observable;
+}
+var Symbol_observable = getSymbolObservable(window);
+/**
+ * Simple Observable implementation.
+ */
+var Observable = /** @class */ (function () {
+    /**
+     * @constructor
+     * @param {Function} subscribe The function called on Observable subscription.
+     */
+    function Observable(subscribe) {
+        if (subscribe) {
+            this._subscribe = subscribe;
+        }
+    }
+    /**
+     * Registers Observer handlers for Observable notifications.
+     *
+     * @param {Observer|Function} [observerOrNext] (optional) Either an observer or next handler.
+     * @param {Function} [error] (optional) The `error` handler.
+     * @param {Function} [complete] (optional) The `complete` handler.
+     * @return {ISubscription} A subscription reference to the registered handlers.
+     */
+    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+        var subscriber = new Subscriber(observerOrNext, error, complete);
+        this._subscribe(subscriber);
+        return subscriber;
+    };
+    Observable.prototype._subscribe = function (subscriber) { };
+    /**
+     * See https://github.com/zenparsing/es-observable
+     * @return {Observable} Self reference.
+     */
+    Observable.prototype[Symbol_observable] = function () {
+        return this;
+    };
+    /**
+     * Creates a new Observable instance.
+     * @param {Function} [subscribe] (optional) The subscriber function to be passed to the Observable constructor.
+     * @return {Observable} A new Observable instance.
+     */
+    Observable.create = function (subscribe) {
+        return new Observable(subscribe);
     };
     return Observable;
 }());
 exports.Observable = Observable;
+/**
+ * Simple SubjectSubscription implementation.
+ */
+var SubjectSubscription = /** @class */ (function (_super) {
+    __extends(SubjectSubscription, _super);
+    /**
+     * @constructor
+     * @param {Subject<T>} [subject] The subscription Subject instance.
+     * @param {IObserver<T>} [subscriber] The subscriber function to be passed to the Observable constructor.
+     */
+    function SubjectSubscription(subject, subscriber) {
+        var _this = _super.call(this) || this;
+        _this.subject = subject;
+        _this.subscriber = subscriber;
+        /**
+         * Indicates whether this SubjectSubscription has already been unsubscribed.
+         * @type {boolean}
+         */
+        _this.closed = false;
+        return _this;
+    }
+    /**
+     * Disposes the SubjectSubscription resources.
+     * @return {void}
+     */
+    SubjectSubscription.prototype.unsubscribe = function () {
+        if (this.closed) {
+            return;
+        }
+        this.closed = true;
+        var subject = this.subject;
+        var observers = subject.observers;
+        this.subject = null;
+        if (!observers || observers.length === 0 || subject.isStopped || subject.closed) {
+            return;
+        }
+        var subscriberIndex = observers.indexOf(this.subscriber);
+        if (subscriberIndex !== -1) {
+            observers.splice(subscriberIndex, 1);
+        }
+    };
+    return SubjectSubscription;
+}(Subscription));
+exports.SubjectSubscription = SubjectSubscription;
+/**
+ * Simple Subject implementation.
+ */
+var Subject = /** @class */ (function (_super) {
+    __extends(Subject, _super);
+    /**
+     * @constructor
+     */
+    function Subject() {
+        var _this = _super.call(this) || this;
+        /**
+         * Indicates whether this Subject has already been unsubscribed.
+         * @type {boolean}
+         */
+        _this.closed = false;
+        /**
+         * Indicates whether this Subject has dispatched a error notification.
+         * @type {boolean}
+         */
+        _this.hasError = false;
+        /**
+         * Indicates whether this Subject has already been stopped.
+         * @type {boolean}
+         */
+        _this.isStopped = false;
+        /**
+         * Collection of Subject observers.
+         * @type {boolean}
+         */
+        _this.observers = [];
+        /**
+         * Reference to thrown error dispatched by this Subject.
+         * @type {any}
+         */
+        _this.thrownError = null;
+        return _this;
+    }
+    /**
+     * Dispatches the `next` notification to the subscribed observers.
+     * @param {T} [value] (optional) The `next` value.
+     * @return {void}
+     */
+    Subject.prototype.next = function (value) {
+        if (this.closed) {
+            throw new Error('The subscription is closed.');
+        }
+        if (!this.isStopped) {
+            var observers = this.observers;
+            var len = observers.length;
+            var copy = observers.slice();
+            for (var i = 0; i < len; i++) {
+                copy[i].next(value);
+            }
+        }
+    };
+    /**
+     * Dispatches the `error` notification to the subscribed observers.
+     * @param {any} [error] The `error` value.
+     * @return {void}
+     */
+    Subject.prototype.error = function (error) {
+        if (this.closed) {
+            throw new Error('The subscription is closed.');
+        }
+        this.hasError = true;
+        this.thrownError = error;
+        this.isStopped = true;
+        var observers = this.observers;
+        var len = observers.length;
+        var copy = observers.slice();
+        for (var i = 0; i < len; i++) {
+            copy[i].error(error);
+        }
+        this.observers.length = 0;
+    };
+    /**
+     * Dispatches the `complete` notification to the subscribed observers.
+     * @return {void}
+     */
+    Subject.prototype.complete = function () {
+        if (this.closed) {
+            throw new Error('The subscription is closed.');
+        }
+        this.isStopped = true;
+        var observers = this.observers;
+        var len = observers.length;
+        var copy = observers.slice();
+        for (var i = 0; i < len; i++) {
+            copy[i].complete();
+        }
+        this.observers.length = 0;
+    };
+    Subject.prototype.unsubscribe = function () {
+        this.isStopped = true;
+        this.closed = true;
+        this.observers = null;
+    };
+    Subject.prototype._subscribe = function (subscriber) {
+        this.observers.push(subscriber);
+        return new SubjectSubscription(this, subscriber);
+    };
+    return Subject;
+}(Observable));
+exports.Subject = Subject;
 
 
 /***/ }),
@@ -469,7 +776,7 @@ var RefreshTokenService = /** @class */ (function () {
             this._intervalSubscription = 0;
         }
         if (this._refreshSubscription) {
-            this.client.onRequestRefreshTokenSuccess.remove(this._refreshSubscription);
+            this._refreshSubscription.unsubscribe();
             this._refreshSubscription = undefined;
         }
     };

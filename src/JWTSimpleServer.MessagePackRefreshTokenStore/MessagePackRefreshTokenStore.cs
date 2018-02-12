@@ -68,8 +68,10 @@ namespace JWTSimpleServer.MessagePackRefreshTokenStore
             try
             {
                 var content = MessagePackSerializer.Serialize(store);
-                File.WriteAllBytes(_storeOptions.Path, content);
-
+                using(var binaryStore = new FileStream(_storeOptions.Path, FileMode.Create))
+                {
+                    await binaryStore.WriteAsync(content, 0, content.Length);
+                }
             }
             finally
             {

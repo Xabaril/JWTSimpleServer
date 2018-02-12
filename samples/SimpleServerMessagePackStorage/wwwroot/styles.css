@@ -1,0 +1,118 @@
+﻿body {
+    font-family: 'Segoe UI';
+}
+
+.top-buffer-10 {
+    margin-top: 10px;
+}
+
+.top-buffer-20 {
+    margin-top: 20px;
+}
+
+.left {
+    float: left;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    float: left;
+}
+
+    .logo img {
+        width: 100px;
+        height: 120px;
+    }
+
+.caption {
+    color: #2e74b0;
+    display: block;
+    font-weight: bold;
+}
+.block {
+    display: block;    
+}
+.success {
+    color: green;
+}
+
+.commit {
+    text-overflow: ellipsis;
+    width: 600px;
+    display: block;
+    overflow: hidden;    
+    margin-top: 15px;
+}
+
+textarea {
+    resize: none;
+}
+.error {
+    color:red;
+}
+
+.hidden {
+    display:none;
+}
+
+.container {
+    width: 100%;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 700px 700px;
+    grid-template-rows: 200px 200px 200px;
+    grid-gap: 10px;
+    background-color: #fff;
+}
+
+.header {
+    grid-column: 1/6;
+}
+
+.first-left {
+    
+    padding: 15px;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    /*border: 0.2px solid lightgray;*/
+}
+
+.text-box {
+    width:580px;
+}
+
+.second-left {
+    padding: 15px;
+    grid-column: 1 / 2;
+    grid-row: 2/ 3;
+}
+
+.third-left {
+    padding: 15px;
+    grid-column: 1/ 2;
+    grid-row: 3 / 3;
+}
+
+.second-right {
+    padding: 15px;
+    grid-column: 2 / 2;
+    grid-row: 2/ 3;
+}
+
+
+.first-right {
+    padding: 15px;
+    grid-column: 2/ 2;
+    grid-row: 1 / 6;
+    /*border: 0.2px solid lightgray;*/
+}
+
+li {
+    list-style-type: circle;
+}

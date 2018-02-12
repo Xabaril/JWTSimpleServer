@@ -15,7 +15,7 @@ namespace SimpleServerInMemoryStorage.Controllers
     {
         public IActionResult Get()
         {
-            return Ok();
+            return Ok("Answer from controller : Authorization successful");
         }
     }
 }

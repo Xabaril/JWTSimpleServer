@@ -3,26 +3,152 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <link href="styles.css" rel="stylesheet" />
 </head>
 <body>
-    <script type="text/javascript" src="simple-server-client.js"></script>
-    <script type="text/javascript">
-        var defaultServerOptions = new JwtSimpleServer.ClientOptions();
-        var simpleServerClient =  new JwtSimpleServer.ServerClient(defaultServerOptions);
-        simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" })
-            .then(token => {
-                var refreshToken = token.refresh_token;
-                var refreshService = new JwtSimpleServer.RefreshTokenService(simpleServerClient);
+    <div class="wrapper">
+        <div class="first-left">
 
+            <div class="logo"><img src="https://avatars3.githubusercontent.com/u/25212406?s=460&v=4" /></div>
+            <div class="center top-buffer-10 caption left" style="display:block">
+                JWT Simple Server Playground
+            </div>
+
+        </div>
+        <div class="second-left">
+            <div class="top-buffer-20 left">
+                <span class="block"><b>Request token</b></span>
+                <textarea rows="7" cols="15" readonly id="tokenbox" type="text" class="text-box block" value=""></textarea>
+                <button class="top-buffer-10" id="requestTokenBtn">Request token</button>
+                <button class="top-buffer-10" id="clearToken">Clear</button>
+            </div>
+
+        </div>
+
+        <div class="third-left">
+            <div class="top-buffer-20 left">
+                <span class="block"><b>Call api/test protected controller with token:</b> <span class="commit" id="tokenPlaceholder"></span> </span>
+                <button class="block top-buffer-10" id="makeRequest">Make authenticated call</button>
+                <span id="callOutput"></span>
+            </div>
+
+        </div>
+        <div class="first-right">
+            <div class="center top-buffer-20 caption left block">
+                Refresh token service setup
+            </div>
+        </div>
+        <div id="refreshContainer" class="second-right hidden">
+            <div class="container top-buffer-20 left block">
+                <b>Start refresh token service (every 5 seconds)</b>
+                <button id="startService">Start</button>
+                <div>
+                    <span style="color:green">Token History</span>
+                    <ul id="tokens"></ul>
+                </div>
+            </div>
+            <div class="container top-buffer-20 left block">
+                <b>Stop refresh token service</b>
+                <button id="stopService">Stop</button>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="simple-server-client.js"></script>
+    <!--JwtSimpleServer has no dependencies so we add axios for http requests-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+    <script type="text/javascript">
+
+
+        var defaultServerOptions = new JwtSimpleServer.ClientOptions();
+        var simpleServerClient = new JwtSimpleServer.ServerClient(defaultServerOptions);
+
+        var initialize = function () {
+
+            let tokenbox = document.getElementById("tokenbox");
+            let outputMessage = document.getElementById("callOutput");
+
+            const setToken = function (token) {
+                let tokenBox = document.getElementById("tokenbox");
+                tokenBox.value = token.access_token;
+                tokenBox.style.color = "#184da3";
+                document.getElementById("tokenPlaceholder").innerText = token.access_token;                
+            }
+
+            let enableRefreshTokenService = function (refreshToken) {
+                document.getElementById("refreshContainer").classList = "second-right";
+                var refreshService = new JwtSimpleServer.RefreshTokenService(simpleServerClient);
                 let onTokenRefreshedFunction = (token) => {
-                    console.log("Refresh token service:", token);
+                    refreshToken = token.refresh_token;
+                    setToken(token);
+                    let li = document.createElement('li');
+                    li.className = "commit";
+                    li.style.color = "#184da3";
+                    li.innerText = token.access_token;
+                    document.getElementById("tokens").appendChild(li);
                 }
-                refreshService.start({
-                    intervalSeconds: 10,
-                    refreshToken,
-                    onRefreshTokenSuccessCallback: onTokenRefreshedFunction
+
+                let startButton = document.getElementById("startService");
+
+                startButton.addEventListener("click", () => {
+                          refreshService.start({
+                                intervalSeconds: 5,
+                                refreshToken,
+                                onRefreshTokenSuccessCallback: onTokenRefreshedFunction
+                    });
+                    startButton.disabled = true;
                 });
-            });
+                document.getElementById("stopService").addEventListener("click", () => {
+                    refreshService.stop();
+                    document.getElementById("tokens").innerHTML = "";
+                    startButton.disabled = false;
+                });
+              
+            };
+
+            const getToken = function () {
+                simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" }).then(token => {
+                    setToken(token);
+                    enableRefreshTokenService(token.refresh_token);
+                });
+            }
+
+            const makeRequest = function () {
+                axios.defaults.headers.common.authorization = "Bearer " + tokenbox.value;
+                axios.get("/api/test").then(result => {
+                    outputMessage.classList = "success";
+                    outputMessage.innerText = "Code: " + result.status + " Data: " + result.data;
+                }).catch(e => {
+                    outputMessage.classList = "error";
+                    outputMessage.innerText = e.message;
+                });
+            }
+
+            document.getElementById("requestTokenBtn").addEventListener("click", getToken);
+            document.getElementById("makeRequest").addEventListener("click", makeRequest);
+            document.getElementById("clearToken").addEventListener("click", () => document.getElementById("tokenbox").value = "");
+
+        }
+
+        initialize();
+
     </script>
 </body>
 </html>
+
+<!--simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" })
+           .then(token => {
+               var refreshToken = token.refresh_token;
+
+
+               let onTokenRefreshedFunction = (token) => {
+                   console.log("Refresh token service:", token);
+               }
+               //refreshService.start({
+               //    intervalSeconds: 10,
+               //    refreshToken,
+               //    onRefreshTokenSuccessCallback: onTokenRefreshedFunction
+               //});
+           });-->

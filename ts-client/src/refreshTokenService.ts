@@ -43,7 +43,8 @@ export class RefreshTokenService {
             this._intervalSubscription = 0;
         }
         if (this._refreshSubscription) {
-            this.client.onRequestAccessTokenSuccess.remove(this._refreshSubscription);
+            this.client.onRequestRefreshTokenSuccess.remove(this._refreshSubscription);
+            this._refreshSubscription = undefined;
         }
     }
 

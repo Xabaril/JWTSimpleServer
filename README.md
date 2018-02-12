@@ -72,7 +72,7 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 	```
 5. Two grant types are supported right now by the server: **_password_** and **_refresh_token_**
 
-	A **_password_** grant type request will require username and password parameters and will allow you to obtain a **_request token_**.
+	A **_password_** grant type request will require username and password parameters and will allow you to obtain an **_access token_**.
 
 	Sample request:
 	```html
@@ -97,7 +97,7 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 	}
 	```
 	
-   A **_refresh_token_** grant type will allow you to create a new access token with a new expiry time and obtain a new **_refresh token_**. (The previous refresh token will be invalidated once used).
+   A **_refresh_token_** grant type will allow you to generate a new access token with a new expiry time and obtain a new **_refresh token_**. (The previous refresh token will be invalidated once used).
 
    The required parameter for this grant type is the refresh token you were previously provided.
 
@@ -124,3 +124,129 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 		"refresh_token": "3521442655fc4ec5b41a1b2d9ce846aa"
 	}
 	```
+
+## Available stores
+
+JWT Simple Server has four different store implementations:
+
+ * In-memory store
+
+ ```csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services
+            .AddSingleton<IAuthenticationProvider, CustomAuthenticationProvider>()
+            .AddJwtSimpleServer(setup =>
+            {
+                setup.IssuerSigningKey = SigningKey;
+            })
+            .AddJwtInMemoryRefreshTokenStore();
+    }
+  ```
+
+ * Entity framework store
+ 
+ ```csharp
+     public void ConfigureServices(IServiceCollection services)
+        {
+            services
+                .AddScoped<IAuthenticationProvider, CustomAuthenticationProvider>()
+                .AddJwtSimpleServer(options => options.IssuerSigningKey = SigningKey)
+                .AddJwtEntityFrameworkCoreRefreshTokenStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                    {
+                        builder.UseSqlServer(
+                            Configuration["ConnectionStrings:DefaultConnection"],
+                            sqlServerOptions => sqlServerOptions.MigrationsAssembly(typeof(Startup).Assembly.FullName));
+                    };
+                });                
+        }
+  ```
+ * Redis store
+   
+   Coming soon.
+
+ * Message pack binary store
+
+  ```csharp
+  public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<IAuthenticationProvider, CustomAuthenticationProvider>()
+            .AddJwtSimpleServer(setup =>
+            {
+                setup.IssuerSigningKey = SigningKey;
+            })
+            .AddJwtMessagePackRefreshTokenStore(setup =>
+            {
+                setup.Path = "MyBinaryStore.bin";
+            });           
+        }
+   ```
+
+ You can create your own store service by implementing __IRefreshTokenStore__ interface and registering it in the inversion of control container.
+
+## Samples
+ 
+ We have some samples with different store configurations available [here](https://github.com/Xabaril/JWTSimpleServer/tree/master/samples).
+
+
+
+ ## Typescript library
+
+ The typescript library will allow you to easily interact will the token endpoint.
+
+ Follow this steps to create your client if you are using the **browser** bundled library:
+
+ 1. Create the client options
+
+  ```javascript
+  var defaultServerOptions = new JwtSimpleServer.ClientOptions();
+  ```
+
+  Client options parameters have default values listed in this table:
+
+| Parameter  |  default value  |
+|--:|---|
+| tokenEndpoint  | "/token"  |
+|  host | window.location.origin   |
+| httpClient  | XMLHttpRequestClient   |
+    
+NOTE: You can implement your own **HttpClient** by implementing our HttpClient abstract class
+
+
+2. Creat the client providing the options object:
+
+ ```javascript
+ var simpleServerClient =  new JwtSimpleServer.ServerClient(defaultServerOptions);
+ ```
+
+ 3. Request an access token by executing _requestAccessTokenMethod_:
+
+ ```javascript
+ simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" })
+ 	.then(token => {
+			// your token object will have the access token and expiral, and if configured: the refresh token
+    }):
+ ```
+ 
+ 4. Optional: If you want the library to request new access tokens given an interval you can configure the __RefreshTokenService__
+
+ ```javascript
+ var refreshService = new JwtSimpleServer.RefreshTokenService(simpleServerClient);
+
+ let onTokenRefreshedFunction = (token) => {
+    console.log("Refresh token service:", token);
+ }
+
+ //Start the renewal service
+ refreshService.start({
+    intervalSeconds: 10,
+    refreshToken,
+    onRefreshTokenSuccessCallback: onTokenRefreshedFunction
+ });
+
+ //Stop the renewal service
+ refreshService.stop();
+  ```
+

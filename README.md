@@ -221,12 +221,12 @@ NOTE: You can implement your own **HttpClient** by implementing our HttpClient a
  var simpleServerClient =  new JwtSimpleServer.ServerClient(defaultServerOptions);
  ```
 
- 3. Request an access token by executing _requestAccessTokenMethod_:
+ 3. Request an access token by executing _requestAccessToken_ method:
 
  ```javascript
  simpleServerClient.requestAccessToken({ userName: "demo", password: "demo" })
  	.then(token => {
-			// your token object will have the access token and expiral, and if configured: the refresh token
+	  // your token object will have the access token and expiral, and if configured: the refresh token
     }):
  ```
  

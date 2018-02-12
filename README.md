@@ -1,8 +1,17 @@
 # JWTSimpleServer
 A light-weight, dynamic jwt server for ASP.NET Core 2.0
 
-## What is it?
-Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a lot ceremony configuration and easily extendable and also a way to renewed access token throught refresh tokens.
+## What is the motivation behind it?
+
+JWT Simple server arises from the need of having an ease-to-use JWT server in ASP.NET, avoiding the user all the ceremony configuration and providing additional features.
+
+## What JWT Simple Server offers?
+
+* Easy to use JWT Server, configured with a few lines of code.
+* Flexible and customizable. You can provide your own authentication and store mechanisms.
+* Implements middleware that exposes the token endpoint so you don't have to create and mantain your own.
+* Provides refresh tokens feature with several store implementations (InMemory, Entity Framework, Redis, Message Pack).
+* Provides a typescript library that will allow you to interact with JWT Server easily. This library offers a JWT Client to request and refresh access tokens and a refresh token automatic renewal service.
 
 ## Getting Started
 
@@ -11,7 +20,7 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
 	```
     Install-Package Comming soon!
 	```
-2. Create your own IAuthenticationProvider for login purpose.
+2. Create your own IAuthenticationProvider for user authentication. You should execute context.success and provide the user claims that will be encoded in the token or context.Reject if the authentication was not successful.
 
   	```csharp
     public class CustomAuthenticationProvider : IAuthenticationProvider
@@ -35,7 +44,7 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
     }
   	```
 
-3. In the _ConfigureServices_ method of _Startup.cs_, register JWTSimpleServer, defining one refresh token store (Optional: By default we register [NoRefreshTokenStore](https://github.com/Xabaril/JWTSimpleServer/blob/c5aeca936105942b96a56419b56c42159896881d/src/JWTSimpleServer/JwtSimpleServerServiceCollectionExtensions.cs#L24) implementation).
+3. In the _ConfigureServices_ method of _Startup.cs_, register JWTSimpleServer services, defining one refresh token store (Optional: By default we register [NoRefreshTokenStore](https://github.com/Xabaril/JWTSimpleServer/blob/c5aeca936105942b96a56419b56c42159896881d/src/JWTSimpleServer/JwtSimpleServerServiceCollectionExtensions.cs#L24) implementation).
 
 	```csharp
     public void ConfigureServices(IServiceCollection services)
@@ -50,7 +59,7 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
     }
 	```
   
-4. In the _Configure_ method, insert middleware to expose the generated token.
+4. In the _Configure_ method, add the middleware to the server exposing the token endpoint and handling it's requests.
 
 	```csharp
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -61,8 +70,11 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
           });
     }
 	```
-5. Now we can make calls to the token endpoint to retrieve a JWT token:
+5. Two grant types are supported right now by the server: **_password_** and **_refresh_token_**
 
+	A **_password_** grant type request will require username and password parameters and will allow you to obtain a **_request token_**.
+
+	Sample request:
 	```html
 	POST https://localhost:44305/Token HTTP/1.1
 	Host: localhost:44305
@@ -85,8 +97,11 @@ Prompted by the need for an easy-to-use JWT Server in ASP.NET Core 2.0 without a
 	}
 	```
 	
-6. If we have previous registered a refresh token store, we can make calls to refresh tokens
+   A **_refresh_token_** grant type will allow you to create a new access token with a new expiry time and obtain a new **_refresh token_**. (The previous refresh token will be invalidated once used).
 
+   The required parameter for this grant type is the refresh token you were previously provided.
+
+	Sample request:
 	```html
 	POST https://localhost:44305/Token HTTP/1.1
 	Host: localhost:44305

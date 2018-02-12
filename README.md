@@ -190,6 +190,9 @@ JWT Simple Server has four different store implementations:
  
  We have some samples with different store configurations available [here](https://github.com/Xabaril/JWTSimpleServer/tree/master/samples).
 
+ If you launch the projects you can try a simple playground  to get access tokens and try the refresh token renewal service.
+
+ ![JWTSimpleServer playground](https://preview.ibb.co/mkhSAn/playground.png)
 
 
  ## Typescript library

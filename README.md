@@ -165,7 +165,21 @@ JWT Simple Server has four different store implementations:
   ```
  * Redis store
    
-   Coming soon.
+  ```csharp
+  public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton<IAuthenticationProvider, CustomAuthenticationProvider>()
+            .AddJwtSimpleServer(setup =>
+            {
+                setup.IssuerSigningKey = SigningKey;
+            })
+            .AddDistributedRedisRefreshStokenStore( setup =>
+            {
+              setup.Configuration = "localhost"; //Provide your redis server configuration
+              setup.InstanceName = "JwtSimpleServerInstance";
+            });          
+        }
+  ```
 
  * Message pack binary store
 
@@ -201,7 +215,7 @@ JWT Simple Server has four different store implementations:
 
  Follow this steps to create your client if you are using the **browser** bundled library:
 
- 1. Create the client options
+ **1. Create the client options**
 
   ```javascript
   var defaultServerOptions = new JwtSimpleServer.ClientOptions();
@@ -218,7 +232,7 @@ JWT Simple Server has four different store implementations:
 NOTE: You can implement your own **HttpClient** by implementing our HttpClient abstract class
 
 
-2. Creat the client providing the options object:
+**2. Creat the client providing the options object:**
 
  ```javascript
  var simpleServerClient =  new JwtSimpleServer.ServerClient(defaultServerOptions);
@@ -232,8 +246,22 @@ NOTE: You can implement your own **HttpClient** by implementing our HttpClient a
 	  // your token object will have the access token and expiral, and if configured: the refresh token
     }):
  ```
+
+ *_Client events_
+
+ JWT client have several observables you can subscribe to:
+
+ | Observable  |  return value  | description |
+|--:|--: |---|
+| onBeforeRequestAccessToken  | void  | Will notify observers before starting the token request to the server |
+|  onRequestAccessTokenSuccess | Token   | Will notify observers passing the retrieved token as parameter |
+| onBeforeRequestRefreshToken  | void   | Will notify observers before starting the refresh token request to the server |
+| onRequestRefreshTokenSuccess  | Token   | Will notify observers passing the retrieved refresh token as parameter  |
+
+
+
  
- 4. Optional: If you want the library to request new access tokens given an interval you can configure the __RefreshTokenService__
+ **4. Optional: If you want the library to request new access tokens given an interval you can configure the __RefreshTokenService__**
 
  ```javascript
  var refreshService = new JwtSimpleServer.RefreshTokenService(simpleServerClient);

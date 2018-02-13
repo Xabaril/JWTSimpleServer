@@ -18,6 +18,8 @@
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
     <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
     <MicrosoftAspNetCoreTestHostPackageVersion>2.0.1</MicrosoftAspNetCoreTestHostPackageVersion>
+    <MicrosoftExtensionsCachingMemoryPackageVersion>2.0.0</MicrosoftExtensionsCachingMemoryPackageVersion>
+    <MicrosoftExtensionsCachingRedisPackageVersion>2.0.0</MicrosoftExtensionsCachingRedisPackageVersion>
     <MessagePackPackageVersion>1.7.3.4</MessagePackPackageVersion>
   </PropertyGroup>
 

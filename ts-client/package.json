@@ -1,7 +1,7 @@
 {
   "name": "jwt-simpleserver-client",
-  "version": "1.0.0",
-  "description": "",  
+  "version": "0.0.1",
+  "description": "Javascript client library for Asp.Net Core Jwt Simple Server package. The client API offers easy token and refresh token retrieval and a configurable interval refresh token service with client notifications",  
   "scripts": {    
     "build": "webpack --config ./webpack.config.js && tsc",
     "test": "jest"

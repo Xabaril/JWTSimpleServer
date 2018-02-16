@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver)
+
 # JWT Simple Server
 A light-weight, dynamic jwt server for ASP.NET Core 2.0
 

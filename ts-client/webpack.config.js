@@ -5,7 +5,7 @@ module.exports = {
     entry: "./index.ts",
     context: path.resolve(__dirname, "src"),
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, './dist/browser'),
         filename: "simple-server-client.js",
         library : 'JwtSimpleServer',
         libraryTarget: 'window'

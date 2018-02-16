@@ -3,10 +3,19 @@
   <PropertyGroup>
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>Entity Framework Core refresh token store for JWT Simple Server </Description>
+    <PackageTags>jwt-server;jwt-token;entity-framework; refresh-token;security;typescript</PackageTags>
+    <Version>$(Version)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Authors>$(Authors)</Authors>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCorePackageVersion)" />
-  </ItemGroup>
+  </ItemGroup>  
 
   <ItemGroup>
     <ProjectReference Include="..\JWTSimpleServer\JWTSimpleServer.csproj" />

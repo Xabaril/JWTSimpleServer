@@ -27,4 +27,13 @@
     <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
     <MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>2.0.0</MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>
   </PropertyGroup>
+
+  <PropertyGroup Label="Package information">
+    <PackageLicenseUrl>https://github.com/Xabaril/JWTSimpleServer/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Xabaril/JWTSimpleServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Xabaril/JWTSimpleServer</RepositoryUrl>    
+    <Authors>Xabaril Contributors</Authors>
+    <Company>Xabaril</Company>
+    <Version>0.0.1</Version>
+  </PropertyGroup>
 </Project>

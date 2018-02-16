@@ -4,11 +4,16 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>    
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Store\**" />
-    <EmbeddedResource Remove="Store\**" />
-    <None Remove="Store\**" />
-  </ItemGroup>
+  <PropertyGroup>    
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>A light weight, dynamic jwt server for ASP.NET Core</Description>
+    <PackageTags>jwt-server;jwt-token;refresh-token;security;typescript</PackageTags>
+    <Version>$(Version)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Authors>$(Authors)</Authors>
+  </PropertyGroup> 
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion)" />

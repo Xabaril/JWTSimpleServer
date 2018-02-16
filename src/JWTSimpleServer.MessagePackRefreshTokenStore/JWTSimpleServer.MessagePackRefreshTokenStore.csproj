@@ -4,6 +4,16 @@
     <TargetFramework>$(NetStandardTargetVersion)</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <Description>MessagePack binary refresh token store for JWT Simple Server </Description>
+    <PackageTags>jwt-server;jwt-token;message-pack; refresh-token;security;typescript</PackageTags>
+    <Version>$(Version)</Version>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Authors>$(Authors)</Authors>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="$(MessagePackPackageVersion)" />
   </ItemGroup>

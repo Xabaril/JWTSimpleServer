@@ -20,7 +20,7 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 1. Install the standard Nuget package into your ASP.NET Core application.
 
 	```
-    Install-Package Comming soon!
+    Install-Package JWTSimpleServer
 	```
 2. Create your own IAuthenticationProvider for user authentication. You should execute context.success and provide the user claims that will be encoded in the token or context.Reject if the authentication was not successful.
 

@@ -23,6 +23,10 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 	```
     Install-Package JWTSimpleServer
 	```
+	```
+    Install-Package JWTSimpleServer.InMemoryRefreshTokenStore
+	```
+	
 2. Create your own IAuthenticationProvider for user authentication. You should execute context.success and provide the user claims that will be encoded in the token or context.Reject if the authentication was not successful.
 
   	```csharp

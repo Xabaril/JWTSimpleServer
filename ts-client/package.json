@@ -1,12 +1,15 @@
 {
   "name": "jwt-simpleserver-client",
   "version": "0.0.1",
-  "description": "Javascript client library for Asp.Net Core Jwt Simple Server package. The client API offers easy token and refresh token retrieval and a configurable interval refresh token service with client notifications",  
-  "scripts": {    
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Xabaril/JWTSimpleServer"
+  },
+  "description": "Javascript client library for Asp.Net Core Jwt Simple Server package. The client API offers easy token and refresh token retrieval and a configurable interval refresh token service with client notifications",
+  "scripts": {
     "build": "webpack --config ./webpack.config.js && tsc",
     "test": "jest"
   },
-  
   "author": "Xabaril",
   "license": "ISC",
   "devDependencies": {
@@ -17,10 +20,17 @@
     "typescript": "^2.7.1",
     "webpack": "^3.10.0"
   },
-  "main": "dist/index.js",  
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": [    
-    "dist/**/*.*"    
+  "files": [
+    "dist/**/*.*"
+  ],
+  "keywords": [
+    "jwt token",    
+    "jwt simple server",
+    "refresh tokens",
+    "jwt server",
+    "typescript"
   ],
   "jest": {
     "transform": {

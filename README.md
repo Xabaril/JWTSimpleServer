@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver)[![MyGet CI](https://img.shields.io/myget/xabaril/v/JWTSimpleServer.svg)](http://myget.org/gallery/xabaril) [![NuGet](https://img.shields.io/nuget/v/JWTSimpleServer.svg)](https://www.nuget.org/packages/xabaril/)
+[![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver) [![MyGet CI](https://img.shields.io/myget/xabaril/v/JWTSimpleServer.svg)](http://myget.org/gallery/xabaril) [![NuGet](https://img.shields.io/nuget/v/JWTSimpleServer.svg)](https://www.nuget.org/packages/xabaril/)
 [![npm version](https://badge.fury.io/js/jwt-simpleserver-client.svg)](https://badge.fury.io/js/jwt-simpleserver-client)
 
 # JWT Simple Server

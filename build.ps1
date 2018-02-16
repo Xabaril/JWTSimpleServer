@@ -42,7 +42,7 @@ echo "running tests"
 
 try {
     
-        Push-Location -Path .\tests\FunctionalTests
+        Push-Location -Path .\test\FunctionalTests
     
         exec { & dotnet xunit -configuration Release --fx-version 2.0.0 }
     } finally {

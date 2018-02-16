@@ -1,7 +1,6 @@
 ﻿using JWTSimpleServer.Abstractions;
 using MessagePack;
 using System;
-using MessagePack;
 using System.Threading.Tasks;
 using System.IO;
 using System.Collections.Concurrent;

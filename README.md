@@ -217,6 +217,11 @@ JWT Simple Server has four different store implementations:
 
  Follow this steps to create your client if you are using the **browser** bundled library:
 
+ **NPM - Installing the library**
+ ```
+ npm install jwt-simpleserver-client --save
+```
+
  **1. Create the client options**
 
   ```javascript

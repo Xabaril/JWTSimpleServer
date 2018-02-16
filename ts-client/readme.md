@@ -5,6 +5,13 @@ Home Repository:
 https://github.com/Xabaril/JWTSimpleServer
 
 
+ **NPM - Installing the library**
+ ```
+ npm install jwt-simpleserver-client --save
+```
+
+
+
  The typescript library will allow you to easily interact will the token endpoint.
 
  Follow this steps to create your client if you are using the **browser** bundled library:

@@ -21,23 +21,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(jwtTokenOptions.IssuerSigningKey));
             };
 
-            services.TryAddSingleton<IRefreshTokenStore,NoRefreshTokenStore>();
+            var tokenValidationParameters = jwtTokenOptions.BuildTokenValidationParameters();
+
+            services.TryAddSingleton<IRefreshTokenStore, NoRefreshTokenStore>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
-                    {
-                        // Study what will be default implementation and what will be configured by user
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = jwtTokenOptions.ValidIssuer,
-                            ValidateAudience = false,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtTokenOptions.IssuerSigningKey)),
-                            RequireExpirationTime = true,
-                            ValidateLifetime = true,
-                            ClockSkew = TimeSpan.Zero
-                        };
+                    {                                                                                                                          
+                       options.TokenValidationParameters = tokenValidationParameters;
                     });
             
             return services;

@@ -1,6 +1,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver) [![MyGet CI](https://img.shields.io/myget/xabaril/v/JWTSimpleServer.svg)](http://myget.org/gallery/jwtsimpleserver) [![NuGet](https://img.shields.io/nuget/v/JWTSimpleServer.svg)](https://www.nuget.org/packages/JWTSimpleServer/)
 [![npm version](https://badge.fury.io/js/jwt-simpleserver-client.svg)](https://badge.fury.io/js/jwt-simpleserver-client)
 
+[![Build history](https://buildstats.info/appveyor/chart/xabaril/jwtsimpleserver)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver/history?branch=master)
+
 # JWT Simple Server
 A light-weight, dynamic jwt server for ASP.NET Core 2.0
 

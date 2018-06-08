@@ -4,7 +4,7 @@
 [![Build history](https://buildstats.info/appveyor/chart/xabaril/jwtsimpleserver)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver/history?branch=master)
 
 # JWT Simple Server
-A light-weight, dynamic jwt server for ASP.NET Core 2.0
+A light-weight, dynamic jwt server for ASP.NET Core 2.1
 
 ## What is the motivation behind it?
 

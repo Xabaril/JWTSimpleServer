@@ -1,31 +1,30 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.0</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>15.5.0</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.7.2</MicrosoftNETTestSdkPackageVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreAllPackageVersion>2.0.5</MicrosoftAspNetCoreAllPackageVersion>
-    <MicrosoftAspNetCoreMvcCorePackageVersion>2.0.2</MicrosoftAspNetCoreMvcCorePackageVersion>
-    <MicrosoftAspNetCoreHttpAbstractionsPackageVersion>2.0.1</MicrosoftAspNetCoreHttpAbstractionsPackageVersion>
-    <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.0.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>
-    <MicrosoftAspNetCoreAuthorizationPackageVersion>2.0.1</MicrosoftAspNetCoreAuthorizationPackageVersion>
-    <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.0.1</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
-    <MicrosoftEntityFrameworkCorePackageVersion>2.0.1</MicrosoftEntityFrameworkCorePackageVersion>
-    <MicrosoftEntityFrameworkCoreSqlServerPackageVersion>2.0.1</MicrosoftEntityFrameworkCoreSqlServerPackageVersion>
-    <FluentAssertionsPackageVersion>5.0.0</FluentAssertionsPackageVersion>    
+    <MicrosoftAspNetCoreAllPackageVersion>2.1.0</MicrosoftAspNetCoreAllPackageVersion>
+    <MicrosoftAspNetCoreMvcCorePackageVersion>2.1.0</MicrosoftAspNetCoreMvcCorePackageVersion>
+    <MicrosoftAspNetCoreHttpAbstractionsPackageVersion>2.1.0</MicrosoftAspNetCoreHttpAbstractionsPackageVersion>
+    <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.1.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>
+    <MicrosoftAspNetCoreAuthorizationPackageVersion>2.1.0</MicrosoftAspNetCoreAuthorizationPackageVersion>
+    <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.1.0</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>2.1.0</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCoreSqlServerPackageVersion>2.1.0</MicrosoftEntityFrameworkCoreSqlServerPackageVersion>
+    <FluentAssertionsPackageVersion>5.3.2</FluentAssertionsPackageVersion>    
     <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
     <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
-    <MicrosoftAspNetCoreTestHostPackageVersion>2.0.1</MicrosoftAspNetCoreTestHostPackageVersion>
-    <MicrosoftExtensionsCachingMemoryPackageVersion>2.0.0</MicrosoftExtensionsCachingMemoryPackageVersion>
-    <MicrosoftExtensionsCachingRedisPackageVersion>2.0.0</MicrosoftExtensionsCachingRedisPackageVersion>
+    <MicrosoftAspNetCoreTestHostPackageVersion>2.1.0</MicrosoftAspNetCoreTestHostPackageVersion>
+    <MicrosoftExtensionsCachingMemoryPackageVersion>2.1.0</MicrosoftExtensionsCachingMemoryPackageVersion>
+    <MicrosoftExtensionsCachingRedisPackageVersion>2.1.0</MicrosoftExtensionsCachingRedisPackageVersion>
     <MessagePackPackageVersion>1.7.3.4</MessagePackPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
-    <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
-    <MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>2.0.0</MicrosoftEntityFrameworkCoreToolsDotNetPackageVersion>
+    <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>    
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
@@ -34,6 +33,6 @@
     <RepositoryUrl>https://github.com/Xabaril/JWTSimpleServer</RepositoryUrl>    
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
   </PropertyGroup>
 </Project>

@@ -1,4 +1,7 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver)[![MyGet CI](https://img.shields.io/myget/xabaril/v/JWTSimpleServer.svg)](http://myget.org/gallery/xabaril) [![NuGet](https://img.shields.io/nuget/v/JWTSimpleServer.svg)](https://www.nuget.org/packages/xabaril/)
+[![Build status](https://ci.appveyor.com/api/projects/status/xkosic4gm7salll3?svg=true)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver) [![MyGet CI](https://img.shields.io/myget/xabaril/v/JWTSimpleServer.svg)](http://myget.org/gallery/jwtsimpleserver) [![NuGet](https://img.shields.io/nuget/v/JWTSimpleServer.svg)](https://www.nuget.org/packages/JWTSimpleServer/)
+[![npm version](https://badge.fury.io/js/jwt-simpleserver-client.svg)](https://badge.fury.io/js/jwt-simpleserver-client)
+
+[![Build history](https://buildstats.info/appveyor/chart/xabaril/jwtsimpleserver)](https://ci.appveyor.com/project/Xabaril/jwtsimpleserver/history?branch=master)
 
 # JWT Simple Server
 A light-weight, dynamic jwt server for ASP.NET Core 2.0
@@ -22,6 +25,10 @@ JWT Simple server arises from the need of having an ease-to-use JWT server in AS
 	```
     Install-Package JWTSimpleServer
 	```
+	```
+    Install-Package JWTSimpleServer.InMemoryRefreshTokenStore
+	```
+	
 2. Create your own IAuthenticationProvider for user authentication. You should execute context.success and provide the user claims that will be encoded in the token or context.Reject if the authentication was not successful.
 
   	```csharp

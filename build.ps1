@@ -44,7 +44,7 @@ try {
     
         Push-Location -Path .\test\FunctionalTests
     
-        exec { & dotnet xunit -configuration Release --fx-version 2.0.0 }
+        exec { & dotnet test }
     } finally {
         Pop-Location
     }

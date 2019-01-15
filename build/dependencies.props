@@ -1,25 +1,25 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>15.7.2</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp2.2</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.9.0</MicrosoftNETTestSdkPackageVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreAllPackageVersion>2.1.0</MicrosoftAspNetCoreAllPackageVersion>
-    <MicrosoftAspNetCoreMvcCorePackageVersion>2.1.0</MicrosoftAspNetCoreMvcCorePackageVersion>
-    <MicrosoftAspNetCoreHttpAbstractionsPackageVersion>2.1.0</MicrosoftAspNetCoreHttpAbstractionsPackageVersion>
-    <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.1.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>
-    <MicrosoftAspNetCoreAuthorizationPackageVersion>2.1.0</MicrosoftAspNetCoreAuthorizationPackageVersion>
-    <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.1.0</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
-    <MicrosoftEntityFrameworkCorePackageVersion>2.1.0</MicrosoftEntityFrameworkCorePackageVersion>
-    <MicrosoftEntityFrameworkCoreSqlServerPackageVersion>2.1.0</MicrosoftEntityFrameworkCoreSqlServerPackageVersion>
-    <FluentAssertionsPackageVersion>5.3.2</FluentAssertionsPackageVersion>    
-    <XUnitPackageVersion>2.3.1</XUnitPackageVersion>
-    <XUnitRunnerVisualstudio>2.3.1</XUnitRunnerVisualstudio>
-    <MicrosoftAspNetCoreTestHostPackageVersion>2.1.0</MicrosoftAspNetCoreTestHostPackageVersion>
-    <MicrosoftExtensionsCachingMemoryPackageVersion>2.1.0</MicrosoftExtensionsCachingMemoryPackageVersion>
-    <MicrosoftExtensionsCachingRedisPackageVersion>2.1.0</MicrosoftExtensionsCachingRedisPackageVersion>
+    <MicrosoftAspNetCoreAllPackageVersion>2.2.0</MicrosoftAspNetCoreAllPackageVersion>
+    <MicrosoftAspNetCoreMvcCorePackageVersion>2.2.0</MicrosoftAspNetCoreMvcCorePackageVersion>
+    <MicrosoftAspNetCoreHttpAbstractionsPackageVersion>2.2.0</MicrosoftAspNetCoreHttpAbstractionsPackageVersion>
+    <MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>2.2.0</MicrosoftExtensionsDependencyInjectionAbstractionsPackageVersion>
+    <MicrosoftAspNetCoreAuthorizationPackageVersion>2.2.0</MicrosoftAspNetCoreAuthorizationPackageVersion>
+    <MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>2.2.0</MicrosoftAspNetCoreAuthenticationJwtBearerPackageVersion>
+    <MicrosoftEntityFrameworkCorePackageVersion>2.2.1</MicrosoftEntityFrameworkCorePackageVersion>
+    <MicrosoftEntityFrameworkCoreSqlServerPackageVersion>2.2.1</MicrosoftEntityFrameworkCoreSqlServerPackageVersion>
+    <FluentAssertionsPackageVersion>5.6.0</FluentAssertionsPackageVersion>    
+    <XUnitPackageVersion>2.4.1</XUnitPackageVersion>
+    <XUnitRunnerVisualstudio>2.4.1</XUnitRunnerVisualstudio>
+    <MicrosoftAspNetCoreTestHostPackageVersion>2.2.0</MicrosoftAspNetCoreTestHostPackageVersion>
+    <MicrosoftExtensionsCachingMemoryPackageVersion>2.2.0</MicrosoftExtensionsCachingMemoryPackageVersion>
+    <MicrosoftExtensionsCachingRedisPackageVersion>2.2.0</MicrosoftExtensionsCachingRedisPackageVersion>
     <MessagePackPackageVersion>1.7.3.4</MessagePackPackageVersion>
   </PropertyGroup>
 

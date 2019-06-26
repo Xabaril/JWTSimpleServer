@@ -16,6 +16,7 @@ namespace SimpleServerInMemoryStorage
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAuthenticationProvider, CustomAuthenticationProvider>()
+            .AddCors()
             .AddJwtSimpleServer(setup =>
             {
                 setup.IssuerSigningKey = SigningKey;
@@ -33,6 +34,12 @@ namespace SimpleServerInMemoryStorage
             app.UseJwtSimpleServer(setup =>
             {
                 setup.IssuerSigningKey = SigningKey;
+            }, pipeline => {
+
+                pipeline.UseCors(setup =>
+                {
+                    setup.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
             });
 
             app.UseMvc();

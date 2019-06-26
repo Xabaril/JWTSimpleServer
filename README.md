@@ -223,7 +223,6 @@ Sample to register CORS middleware within the pipeline:
 app.UseJwtSimpleServer(setup =>
  {
    setup.IssuerSigningKey = SigningKey;
-
  }, pipeline => {
    pipeline.UseCors(setup =>
   {
